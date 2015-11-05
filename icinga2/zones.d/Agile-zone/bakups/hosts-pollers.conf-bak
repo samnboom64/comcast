@@ -1,0 +1,114 @@
+/*
+ * Host definitions with object attributes
+ * used for apply rules for Service, Notification,
+ * Dependency and ScheduledDowntime objects.
+ *
+ * Tip: Use `icinga2 object list --type Host` to
+ * list all host objects after running
+ * configuration validation (`icinga2 daemon -C`).
+ */
+
+object Host "respoller-cmcd-01c"{
+  import "generic-host"
+  address = "96.119.146.39"
+  vars.os = "linux"
+  vars.http_vhosts["http"] = {
+  }
+  vars.disks["disk"] = {
+  }
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+
+object Host "respoller-cmcd-02c"{
+  import "generic-host"
+  address = "96.119.146.40"
+  vars.os = "linux"
+  vars.http_vhosts["http"] = {
+  }
+  vars.disks["disk"] = {
+  }
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+
+object Host "respoller-cmcd-03c"{
+  import "generic-host"
+  address = "96.119.146.41"
+  vars.os = "linux"
+  vars.http_vhosts["http"] = {
+  }
+  vars.disks["disk"] = {
+  }
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+
+object Host "respoller-cmcd-04c"{
+  import "generic-host"
+  address = "96.119.146.42"
+  vars.os = "linux"
+#  vars.http_vhosts["http"] = {
+#  }
+  vars.disks["disk"] = {
+  }
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+
+object Host "respoller-ch2d-01c"{
+  import "generic-host"
+  address = "96.119.82.71"
+  vars.os = "linux"
+  vars.http_vhosts["http"] = {
+  }
+  vars.disks["disk"] = {
+  }
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+
+object Host "respoller-ch2d-02c"{
+  import "generic-host"
+  address = "96.119.82.68"
+  vars.os = "linux"
+  vars.http_vhosts["http"] = {
+  }
+  vars.disks["disk"] = {
+  }
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+
+object Host "respoller-ch2d-03c"{
+  import "generic-host"
+  address = "96.119.82.70"
+  vars.os = "linux"
+  vars.http_vhosts["http"] = {
+  }
+  vars.disks["disk"] = {
+  }
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+
+object Host "respoller-ch2d-04c"{
+  import "generic-host"
+  address = "96.119.82.69"
+  vars.os = "linux"
+#  vars.http_vhosts["http"] = {
+#  }
+  vars.disks["disk"] = {
+  }
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+

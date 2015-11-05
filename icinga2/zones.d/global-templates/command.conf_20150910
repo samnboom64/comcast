@@ -1,0 +1,47 @@
+object CheckCommand "nrpe8k" {
+        import "plugin-check-command"
+
+        command = [ "/usr/lib64/nagios/plugins/check_nrpe8k" ]
+
+        arguments = {
+                "-H" = "$nrpe_address$"
+                "-p" = "$nrpe_port$"
+                "-c" = "$nrpe_command$"
+                "-n" = {
+                        set_if = "$nrpe_no_ssl$"
+                        description = "Do not use SSL."
+                }
+                "-u" = {
+                        set_if = "$nrpe_timeout_unknown$"
+                        description = "Make socket timeouts return an UNKNOWN state instead of CRITICAL"
+                }
+                "-t" = "$nrpe_timeout$"
+                "-a" = {
+                        value = "$nrpe_arguments$"
+                        repeat_key = false
+                        order = 1
+                }
+        }
+
+        vars.nrpe_address = "$address$"
+        vars.nrpe_no_ssl = true
+        vars.nrpe_timeout_unknown = false
+
+        timeout = 5m
+}
+
+
+object CheckCommand "check_multi" {
+        import "plugin-check-command"
+        command = [ "/usr/lib64/nagios/plugins/check_multi" ]
+        arguments = {
+                "-s" = "$host_address$"
+                "-r" = "$report_level$"
+                "-f" = "$config_file$"
+
+        }
+        vars.host_address = "HOSTADDRESS=$address$"
+        vars.report_level = "1+4+32+64"
+        timeout = 60s
+}
+

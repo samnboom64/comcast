@@ -1,0 +1,57 @@
+#OpenXchange Service checks
+apply Service "OX:NumberOfActiveSessions" {
+        import "openxchange-service"
+        display_name ="OX:NumberOfActiveSessions"
+        check_command = "nrpe"
+        vars.nrpe_timeout = 60
+        vars.nrpe_timeout_unknown = true
+	vars.nrpe_command = "check_jmx"
+        vars.nrpe_arguments = "NumberOfActiveSessions"
+        assign where "Open_Xchange_mail" in host.groups
+}
+
+apply Service "OX:Filehandles" {
+        import "openxchange-service"
+        display_name ="OX:Filehandles"
+        check_command = "nrpe"
+        vars.nrpe_timeout = 60
+        vars.nrpe_timeout_unknown = true
+        vars.nrpe_command = "check_jmx"
+        vars.nrpe_arguments = "Filehandles"
+        assign where "Open_Xchange_mail" in host.groups
+}
+
+
+apply Service "OX:Threads" {
+        import "openxchange-service"
+        display_name ="OX:Threads"
+        check_command = "nrpe"
+        vars.nrpe_timeout = 60
+        vars.nrpe_timeout_unknown = true
+        vars.nrpe_command = "check_jmx"
+        vars.nrpe_arguments = "Threads"
+        assign where "Open_Xchange_mail" in host.groups
+}
+
+
+apply Service "OX:Thread_pool_tasks" {
+        import "openxchange-service"
+        display_name ="OX:Thread_pool_tasks"
+        check_command = "nrpe"
+        vars.nrpe_timeout = 60
+        vars.nrpe_timeout_unknown = true
+        vars.nrpe_command = "check_jmx"
+        vars.nrpe_arguments = "Thread_pool_tasks"
+        assign where "Open_Xchange_mail" in host.groups
+}
+
+apply Service "OX:Broken_connections" {
+        import "openxchange-service"
+        display_name ="OX:Broken_connections"
+        check_command = "nrpe"
+        vars.nrpe_timeout = 60
+        vars.nrpe_timeout_unknown = true
+        vars.nrpe_command = "check_jmx"
+        vars.nrpe_arguments = "Broken_connections"
+        assign where "Open_Xchange_mail" in host.groups
+}

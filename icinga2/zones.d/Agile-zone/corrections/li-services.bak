@@ -1,0 +1,32 @@
+apply Service "LI:Port_HTTP" {
+        import "generic-service"
+        display_name ="LI:Port_HTTP"
+        check_command ="http"
+        vars.http_ssl = false
+        vars.http_timeout = 60
+        vars.http_port = 8080
+        assign where match("*li*", host.name)
+}
+
+
+apply Service "LIDB:ORACLE:PORT_1521" {
+        import "generic-service"
+        display_name ="LIDB:ORACLE:PORT_1521"
+        check_command ="tcp"
+        vars.tcp_timeout = 60
+        vars.tcp_port = 1521        
+        assign where match("*lidb*", host.name)
+}
+
+
+apply Service "LIDB:Snapshot_threads" {
+        import "generic-service"
+        display_name ="LIDB:Snapshot_threads"
+        check_command ="nrpe8k"
+        vars.nrpe_no_ssl = true
+        vars.nrpe_command = "li_snap_thrds"
+        vars.nrpe_timeout = 60
+        assign where match("*lidb*", host.name)
+}
+
+
