@@ -1,0 +1,134 @@
+apply Service "CSA:Port_HTTP" {
+	import "generic-service"
+	display_name ="CSA:Port_HTTP"
+	check_command = "http"	
+	vars.nrpe_no_ssl = true
+	vars.nrpe_command = "check_http_connectvity"
+	vars.nrpe_timeout = 60
+
+	assign where match("*csa*", host.name)
+}
+
+apply Service "CSA:EDGE_Connectivity" {
+	import "generic-service"
+	display_name ="CSA:EDGE_Connectivity"
+	vars.nrpe_no_ssl = true
+	vars.nrpe_command = "check_edge_connectvity"
+	vars.nrpe_timeout = 60
+
+	assign where match("*csa*", host.name)
+}
+
+apply Service "CSA:MAIL_Connectivity" {
+	import "generic-service"
+	display_name ="CSA:MAIL_Connectivity"
+	vars.nrpe_no_ssl = true
+	vars.nrpe_command = "check_mail_connectvity"
+	vars.nrpe_timeout = 60
+
+	assign where match("*csa*", host.name)
+}
+
+apply Service "CSA:DB_Connectivity" {
+	import "generic-service"
+	display_name ="CSA:DB_Connectivity"
+	vars.nrpe_no_ssl = true
+	vars.nrpe_command = "check_db_connectvity"
+	vars.nrpe_timeout = 60
+
+	assign where match("*csa*", host.name)
+}
+
+apply Service "CSA:Bizanga_Inbound_Connectivity" {
+	import "generic-service"
+	display_name ="CSA:Bizanga_Inbound_Connectivity"
+	vars.nrpe_no_ssl = true
+	vars.nrpe_command = "check_bizanga_connectvity"
+	vars.nrpe_timeout = 60
+	vars.nrpe_arguments = ["resrmta-ch2-04v.sys.comcast.net"]
+	assign where match("*csa*", host.name)
+}
+
+apply Service "CSA:Bizanga_Outbound_Connectivity" {
+	import "generic-service"
+	display_name ="CSA:Bizanga_Outbound_Connectivity"
+	vars.nrpe_no_ssl = true
+	vars.nrpe_command = "check_bizanga_connectvity"
+	vars.nrpe_timeout = 60
+	vars.nrpe_arguments = ["resrmta-ch2-03v.sys.comcast.net"]
+	assign where match("*csa*", host.name)
+}
+
+apply Service "CSA:Report_URL_Connectivity" {
+	import "generic-service"
+	display_name ="CSA:Report_URL_Connectivity"
+	vars.nrpe_no_ssl = true
+	vars.nrpe_command = "check_bizanga_connectvity"
+	vars.nrpe_timeout = 60
+	vars.nrpe_arguments = ["resmmta-ch2-01v.sys.comcast.net"]
+	assign where match("*csa*", host.name)
+}
+
+apply Service "CSADB:ORACLE:PORT_1521" {
+	import "generic-service"
+	display_name ="CSADB:ORACLE:PORT_1521"
+	vars.nrpe_no_ssl = true
+	vars.nrpe_command = "check_tcp_port"
+	vars.nrpe_timeout = 60
+	vars.nrpe_arguments = ["1521"]
+	assign where match("*csa*", host.name)
+}
+
+apply Service "CSA:RADIUS:connectivity" {
+	import "generic-service"
+	display_name ="CSA:RADIUS:connectivity"
+	vars.nrpe_no_ssl = true
+	vars.nrpe_command = "check_csa_radius_connectivity"
+	vars.nrpe_timeout = 60
+
+	assign where match("*csa*", host.name)
+}
+
+apply Service "CSA:RADIUS:LOG" {
+	import "generic-service"
+	display_name ="CSA:RADIUS:LOG"
+	vars.nrpe_no_ssl = true
+	vars.nrpe_command = "check_csa_error_log"
+	vars.nrpe_timeout = 60
+
+	assign where match("*csa*", host.name)
+}
+
+apply Service "CSA:DNS:connectivity" {
+	import "generic-service"
+	display_name ="CSA:DNS:connectivity"
+	check_command ="nrpe8k"
+	vars.nrpe_no_ssl = true
+	vars.nrpe_command = "check_udp_con"
+	vars.nrpe_timeout = 60
+	vars.nrpe_arguments = ["76.96.53.44", "53"]
+	assign where match("*csa*", host.name)
+}
+
+apply Service "CSA:Jboss_procs" {
+	import "generic-service"
+	display_name ="CSA:Jboss_procs"
+	check_command ="nrpe8k"
+	vars.nrpe_no_ssl = true
+	vars.nrpe_command = "check_csa_jboss_procs"
+	vars.nrpe_timeout = 60
+
+	assign where match("*csa*", host.name)
+}
+
+apply Service "CSA:DB_Synthetic" {
+	import "generic-service"
+	display_name ="CSA:DB_Synthetic"
+	check_command ="nrpe8k"
+	vars.nrpe_no_ssl = true
+	vars.nrpe_command = "check_csa_db_synthcheck"
+	vars.nrpe_timeout = 60
+
+	assign where match("*csa*", host.name)
+}
+

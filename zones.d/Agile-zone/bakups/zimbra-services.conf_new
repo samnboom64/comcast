@@ -1,0 +1,476 @@
+
+apply Service "Zimbra Server Metrics" {
+  import "generic-service"
+  display_name ="Zimbra Server Metrics"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "check_zimbra_server_metrics"
+  vars.nrpe_timeout = 240
+  vars.nrpe_timeout_unknown = true 
+  assign where match("^resmail*", host.name)
+}
+
+
+apply Service "ZIMBRA8:AUTHLOOP" {
+  import "generic-service"
+  display_name ="ZIMBRA8:AUTHLOOP"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "check_zimbra_authloop"
+  vars.nrpe_timeout = 240
+  vars.nrpe_timeout_unknown = true 
+  assign where match("^resmail*", host.name)
+}
+
+apply Service "ZIMBRA8:CONNECTIONS_closewait" {
+  import "generic-service"
+  display_name ="ZIMBRA8:CONNECTIONS_closewait"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "zimbra_cxn_closewait"
+  vars.nrpe_timeout = 240
+  vars.nrpe_timeout_unknown = true 
+  assign where match("^resmail*", host.name)
+}
+
+apply Service "ZIMBRA8:CONNECTIONS_established" {
+  import "generic-service"
+  display_name ="ZIMBRA8:CONNECTIONS_established"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "zimbra_cxn_estab"
+  vars.nrpe_timeout = 240
+  vars.nrpe_timeout_unknown = true 
+  assign where match("^resmail*", host.name)
+}
+
+apply Service "ZIMBRA8:IMAP FETCH" {
+  import "generic-service"
+  display_name ="ZIMBRA8:IMAP FETCH"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "check_zimbra_imap_count"
+  vars.nrpe_timeout = 60
+  assign where match("^resmail*", host.name)
+}
+
+
+apply Service "ZIMBRA8:Inbox_Availability_SOAP" {
+  import "generic-service"
+  display_name ="ZIMBRA8:Inbox_Availability_SOAP"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "inbox_availability_soap"
+  vars.nrpe_timeout = 60
+  assign where match("^resmail*", host.name)
+}
+
+
+apply Service "ZIMBRA8:Iptable_blocks_count" {
+  import "generic-service"
+  display_name ="ZIMBRA8:Iptable_blocks_count"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "iptable_blocks"
+  vars.nrpe_timeout = 240
+  assign where match("^resmail*", host.name)
+}
+
+
+apply Service "ZIMBRA8:JVM_gc_minor" {
+  import "generic-service"
+  display_name ="ZIMBRA8:JVM_gc_minor"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "zimbra_jvm_gcminor"
+  vars.nrpe_timeout = 240
+  assign where match("^resmail*", host.name)
+}
+
+
+apply Service "ZIMBRA8:JVM_heapsize" {
+  import "generic-service"
+  display_name ="ZIMBRA8:JVM_heapsize"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "zimbra_jvm_heapsize"
+  vars.nrpe_timeout = 240
+  assign where match("^resmail*", host.name)
+}
+
+
+apply Service "ZIMBRA8:LDAP_check" {
+  import "generic-service"
+  display_name ="ZIMBRA8:LDAP_check"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "zimbra_ldap_check"
+  vars.nrpe_timeout = 240
+  assign where match("^resmail*", host.name)
+}
+
+
+apply Service "ZIMBRA8:LICENSE" {
+  import "generic-service"
+  display_name ="ZIMBRA8:LICENSE"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "zimbra_license"
+  vars.nrpe_timeout = 240
+  assign where match("^resmail*", host.name)
+}
+
+apply Service "ZIMBRA8:LICENSE_activation" {
+  import "generic-service"
+  display_name ="ZIMBRA8:LICENSE_activation"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "zimbra_license_activation_status"
+  vars.nrpe_timeout = 240
+  assign where match("^resmail*", host.name)
+}
+
+
+apply Service "ZIMBRA8:MAILBOXD_fd" {
+  import "generic-service"
+  display_name ="ZIMBRA8:MAILBOXD_fd"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "check_mailboxd_fd"
+  vars.nrpe_timeout = 240
+  vars.nrpe_arguments = [ "fd.csv" , "30000" ,"45000" ]
+  vars.nrpe_timeout_unknown = true 
+  
+  assign where match("^resmail*", host.name)
+}
+
+
+apply Service "ZIMBRA8:MAILBOXD_logsize" {
+  import "generic-service"
+  display_name ="ZIMBRA8:MAILBOXD_logsize"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "zimbra_filesize"
+  vars.nrpe_timeout = 240
+  vars.nrpe_timeout_unknown = true 
+  assign where match("^resmail*", host.name)
+}
+
+
+apply Service "ZIMBRA8:MAILBOXLOG_counters" {
+  import "generic-service"
+  display_name ="ZIMBRA8:MAILBOXLOG_counters"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "check_mailbox_counter"
+  vars.nrpe_timeout = 240
+  vars.nrpe_timeout_unknown = true 
+  assign where match("^resmail*", host.name)
+}
+
+
+
+apply Service "ZIMBRA8:MAILBOX_blob" {
+  import "generic-service"
+  display_name ="ZIMBRA8:MAILBOX_blob"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "nrpe-check_blob"
+  vars.nrpe_timeout = 300
+  assign where match("^resmail*", host.name)
+}
+
+
+apply Service "ZIMBRA8:MAILBOX_purge" {
+  import "generic-service"
+  display_name ="ZIMBRA8:MAILBOX_purge"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "check_zimbra_purge"
+  vars.nrpe_timeout = 300
+  assign where match("^resmail*", host.name)
+}
+
+apply Service "ZIMBRA8:MAILBOX_reindex" {
+  import "generic-service"
+  display_name ="ZIMBRA8:MAILBOX_reindex"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "zimbra_Reindex"
+  vars.nrpe_timeout = 60
+  assign where match("^resmail*", host.name)
+}
+
+apply Service "ZIMBRA8:MAILBOX_reindex" {
+  import "generic-service"
+  display_name ="ZIMBRA8:MAILBOX_reindex"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "zimbra_Reindex"
+  vars.nrpe_timeout = 60
+  assign where match("^resmail*", host.name)
+}
+
+
+apply Service "ZIMBRA8:NPE" {
+  import "generic-service"
+  display_name ="ZIMBRA8:NPE"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "check_zimbra_npe"
+  vars.nrpe_timeout = 240
+  vars.nrpe_timeout_unknown = true 
+  assign where match("^resmail*", host.name)
+}
+
+
+apply Service "ZIMBRA8:POP RETR" {
+  import "generic-service"
+  display_name ="ZIMBRA8:POP RETR"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "check_zimbra_pop_count"
+  assign where match("^resmail*", host.name)
+}
+
+apply Service "ZIMBRA8:PORT_admin_availability" {
+  import "generic-service"
+  display_name ="ZIMBRA8:PORT_admin_availability"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "check_zimbra_admin"
+  vars.nrpe_timeout = 60
+  assign where match("^resmail*", host.name)
+}
+
+
+apply Service "ZIMBRA8:PORT_http_thread_saturation" {
+  import "generic-service"
+  display_name ="ZIMBRA8:PORT_http_thread_saturation"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "zimbra_http_threadsatcnt"
+  vars.nrpe_timeout = 240
+  vars.nrpe_timeout_unknown = true 
+  assign where match("^resmail*", host.name)
+}
+
+
+apply Service "ZIMBRA8:PORT_imap_thread_saturation" {
+  import "generic-service"
+  display_name ="ZIMBRA8:PORT_imap_thread_saturation"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "zimbra_imap_threadsatcnt"
+  vars.nrpe_timeout = 240
+  vars.nrpe_timeout_unknown = true 
+  assign where match("^resmail*", host.name)
+}
+
+
+apply Service "ZIMBRA8:PRESENCE_log" {
+  import "generic-service"
+  display_name ="ZIMBRA8:PRESENCE_log"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "presence_logcheck"
+  vars.nrpe_timeout = 90
+  assign where match("^resmail*", host.name)
+}
+
+
+apply Service "ZIMBRA8:PRESENCE_port" {
+  import "generic-service"
+  display_name ="ZIMBRA8:PRESENCE_port"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "presence_tcp"
+  vars.nrpe_timeout = 90
+  assign where match("^resmail*", host.name)
+}
+
+apply Service "ZIMBRA8:PRESENCE_process" {
+  import "generic-service"
+  display_name ="ZIMBRA8:PRESENCE_process"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "presence_proccheck"
+  vars.nrpe_timeout = 90
+  assign where match("^resmail*", host.name)
+}
+
+
+apply Service "ZIMBRA8:SERVICES" {
+  import "generic-service"
+  display_name ="ZIMBRA8:SERVICES"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "zimbra_service"
+  vars.nrpe_timeout = 240
+  assign where match("^resmail*", host.name)
+}
+
+
+apply Service "ZIMBRA8:SOAP GetMsgRequest" {
+  import "generic-service"
+  display_name ="ZIMBRA8:SOAP GetMsgRequest"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "check_zimbra_soap_count"
+  assign where match("^resmail*", host.name)
+}
+
+apply Service "ZIMBRA8:SYNTHETIC_imap" {
+  import "generic-service"
+  display_name ="ZIMBRA8:SYNTHETIC_imap"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "imap_synthetic_check"
+  vars.nrpe_timeout = 60
+  assign where match("^resmail*", host.name)
+}
+
+
+apply Service "ZIMBRA8:SYNTHETIC_pop" {
+  import "generic-service"
+  display_name ="ZIMBRA8:SYNTHETIC_pop"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "pop_synthetic_check"
+  vars.nrpe_timeout = 60
+  assign where match("^resmail*", host.name)
+}
+
+
+apply Service "ZIMBRA8:WEBMAIL_inbox_availability" {
+  import "generic-service"
+  display_name ="ZIMBRA8:WEBMAIL_inbox_availability"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "check_inbox"
+  vars.nrpe_timeout = 300
+  vars.nrpe_timeout_unknown = true 
+  assign where match("^resmail*", host.name)
+}
+
+apply Service "ZIMBRA8:Zimbra_timing_data" {
+  import "generic-service"
+  display_name ="ZIMBRA8:Zimbra_timing_data"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "zimbra_timing_data"
+  vars.nrpe_timeout = 240
+  vars.nrpe_timeout_unknown = true 
+  assign where match("^resmail*", host.name)
+}
+
+
+apply Service "ZIMBRA8:FD_Utilization" {
+  import "generic-service"
+  display_name ="ZIMBRA8:FD_Utilization"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "check_fd_count"
+  vars.nrpe_timeout = 60
+  vars.nrpe_timeout_unknown = true 
+  vars.nrpe_arguments = [ "90" , "85" , "root" ]
+  assign where match("^resmail*", host.name)
+}
+
+
+
+apply Service "ZIMBRA8:FD_Utilization_zimbra" {
+  import "generic-service"
+  display_name ="ZIMBRA8:FD_Utilization_zimbra"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "check_fd_count"
+  vars.nrpe_timeout = 60
+  vars.nrpe_timeout_unknown = true 
+  vars.nrpe_arguments = [ "90" , "85" , "zimbra" ]
+  assign where match("^resmail*", host.name)
+}
+
+
+apply Service "ZIMBRA8:FILEAGE_ccnotifier.log" {
+  import "generic-service"
+  display_name ="ZIMBRA8:FILEAGE_ccnotifier.log"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "check_file_age"
+  vars.nrpe_timeout = 60
+  vars.nrpe_timeout_unknown = true 
+  vars.nrpe_arguments = [ "300" , "360" , "/opt/zimbra/log/cc-notifier.log" ]
+  assign where match("^resmail*", host.name)
+}
+
+apply Service "ZIMBRA8:G1_GC" {
+  import "generic-service"
+  display_name ="ZIMBRA8:G1_GC"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "check_g1gc"
+  vars.nrpe_timeout = 60
+  vars.nrpe_timeout_unknown = true 
+  vars.nrpe_arguments = [ "0.3" , "0.5" ]
+  assign where match("^resmail*", host.name)
+}
+
+
+
+apply Service "ZIMBRA8:JVM_gc" {
+  import "generic-service"
+  display_name ="ZIMBRA8:JVM_gc"
+  check_command = "nrpe8k"
+  vars.nrpe_no_ssl = true
+  vars.nrpe_command = "zimbra_gc"
+  vars.nrpe_timeout = 60
+  vars.nrpe_timeout_unknown = true 
+  vars.nrpe_arguments = [ "30" , "60" ]
+  assign where match("^resmail*", host.name)
+}
+
+
+apply Service "ZIMBRA8:PORT_http_availability" {
+  import "generic-service"
+  display_name ="ZIMBRA8:PORT_http_availability"
+  check_command = "http"
+  vars.http_warn_time = 10
+  vars.http_critical_time = 20
+  vars.http_timeout = 240
+  vars.http_vhost = host.address
+  assign where match("^resmail*", host.name)
+}
+
+
+
+apply Service "ZIMBRA8:PORT_imap_availability" {
+  import "generic-service"
+  display_name ="ZIMBRA8:PORT_imap_availability"
+  check_command = "smtp"
+  vars.smtp_port = 7143
+  vars.smtp_timeout = 240
+  vars.smtp_expect = server ready
+  assign where match("*mail*", host.name)
+}
+
+
+apply Service "ZIMBRA8:PORT_lmtp_availability" {
+  import "generic-service"
+  display_name ="ZIMBRA8:PORT_lmtp_availability"
+  check_command = "smtp"
+  vars.smtp_port = 7025
+  vars.smtp_warning = 10
+  vars.smtp_critical = 20
+  vars.smtp_timeout = 240
+  assign where match("*mail*", host.name)
+}
+
+apply Service "ZIMBRA8:PORT_pop_availability" {
+  import "generic-service"
+  display_name ="ZIMBRA8:PORT_pop_availability"
+  check_command = "pop"
+  vars.pop_port = 7110
+  vars.pop_address = host.name
+  assign where match("*mail*", host.name)
+}

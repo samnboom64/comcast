@@ -1,0 +1,11 @@
+object CheckCommand "check_snmp_errors" {
+        import "plugin-check-command"
+        command = [ "/usr/lib64/nagios/plugins/check_snmp_errors" ]
+        arguments = {
+                "-H" = "$snmp_address$"
+                "-o" = "$snmp_oid$"
+                "-C" = "$snmp_comment$"
+      }
+}
+
+

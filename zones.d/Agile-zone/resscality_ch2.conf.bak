@@ -1,0 +1,584 @@
+object Host "resiscd-ch2-001p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.11"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-002p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.12"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-003p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.13"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-004p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.14"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-005p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.15"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-006p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.16"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-007p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.17"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-008p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.18"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-009p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.19"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-010p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.20"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-011p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.21"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-012p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.22"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-013p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.23"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-014p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.24"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-015p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.25"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-016p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.26"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-017p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.27"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-018p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.28"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-019p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.29"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-020p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.30"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-021p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.31"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-022p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.32"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-023p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.33"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-024p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.34"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-025p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.35"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-026p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.36"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-027p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.37"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-028p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.38"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-029p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.39"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-030p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.40"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-031p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.41"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-032p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.42"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-033p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.43"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-034p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.44"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-035p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.45"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-036p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.46"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-038p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.48"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-039p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.49"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-040p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.50"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-041p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.51"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-042p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.52"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-043p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.53"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-045p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.55"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-046p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.56"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-047p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.57"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-048p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.58"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-049p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.59"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-051p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.61"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-052p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.62"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-037p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.47"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-044p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.54"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-050p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.60"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-053p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.63"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-054p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.64"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-055p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.65"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-056p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.66"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-057p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.67"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-058p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.68"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-059p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.69"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-060p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.70"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-061p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.71"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-062p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.72"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-063p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.73"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-064p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.74"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-065p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.75"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-066p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.76"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-067p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.77"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-068p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.78"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-069p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.79"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-070p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.80"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-071p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.81"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-072p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.82"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resiscd-ch2-073p.sys.comcast.net" {
+  import "generic-host"
+  address = "172.28.223.83"
+  vars.os = "linux"
+  vars.notification["mail"] = {
+    groups = [ "icingaadmins" ]
+  }
+}

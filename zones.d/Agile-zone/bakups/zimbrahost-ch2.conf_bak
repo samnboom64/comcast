@@ -1,0 +1,801 @@
+object Host "resmail-ch2-001v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.30"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-002v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.31"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-003v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.32"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-004v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.33"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-005v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.34"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-006v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.35"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-007v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.36"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-008v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.37"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-009v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.38"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-010v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.39"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-011v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.40"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-012v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.41"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-013v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.42"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-014v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.43"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-015v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.44"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-016v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.45"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-017v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.46"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-018v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.47"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-019v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.48"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-020v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.49"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-021v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.50"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-022v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.51"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-023v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.52"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-024v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.53"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-025v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.54"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-026v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.55"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-027v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.56"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-028v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.57"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-029v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.58"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-030v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.59"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-031v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.60"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-032v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.61"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-033v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.62"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-034v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.63"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-035v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.64"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-036v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.65"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-037v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.66"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-038v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.67"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-039v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.68"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-040v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.69"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-041v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.70"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-042v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.71"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-043v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.72"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-044v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.73"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-045v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.74"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-046v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.75"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-047v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.76"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-048v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.77"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-049v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.78"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-050v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.79"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-051v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.80"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-052v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.81"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-053v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.82"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-054v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.83"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-055v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.84"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-056v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.85"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-057v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.86"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-058v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.87"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-059v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.88"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-060v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.89"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-061v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.90"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-062v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.91"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-063v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.92"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-064v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.93"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-065v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.94"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-066v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.95"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-067v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.96"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-068v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.97"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-069v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.98"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-070v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.99"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-071v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.105"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-072v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.106"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-073v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.107"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-074v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.108"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-075v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.109"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-076v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.110"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-077v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.111"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-078v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.112"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-079v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.113"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-080v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.114"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-081v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.115"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-082v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.116"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-083v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.117"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-084v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.118"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-085v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.119"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-086v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.120"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-087v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.121"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-088v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.122"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-089v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.123"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-090v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.124"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-091v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.125"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-092v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.126"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-093v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.127"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-094v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.128"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-095v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.129"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-096v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.130"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-097v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.131"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-098v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.132"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-099v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.133"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+object Host "resmail-ch2-100v.sys.comcast.net" {
+  import "generic-host"
+  address = "162.150.48.134"
+  vars.os = "linux"
+  vars.notification["oiv"] = {
+    groups = [ "icingaadmins" ]
+  }
+}
+
