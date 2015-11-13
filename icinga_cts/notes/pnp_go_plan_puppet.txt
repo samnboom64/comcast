@@ -1,0 +1,80 @@
+
+
+define res_zimbra::zimbra_server::xc38::files ($feature = $title,$user1,$mode,$dir) {
+  file { "$feature":
+        ensure => "file",
+        owner => $user1,
+        group => $user1,
+        mode  => $mode,
+        source => "${dir}${feature}",
+
+  }
+}
+
+res_zimbra::zimbra_server::xc38::files {
+"/opt/zimbra/jetty/webapps/zimbra/WEB-INF/tags/infra/appTabs.tag": user1 => "zimbra" , mode => "644", dir => "/opt/zimbra-installer/xc38_package/XC38_beta";
+"/opt/zimbra/lib/jars/zimbrastore.jar": user1 => "root" , mode => "444", dir => "/opt/zimbra-installer/xc38_package/XC38_beta";
+
+}->
+
+
+
+define res_zimbra::zimbra_server::xc38::zimbracommand($feature = $title){
+
+exec { "zimbracommand-${feature}":
+          command  => "/bin/su - zimbra -c '${feature}'",
+     }
+
+        }
+
+res_zimbra::zimbra_server::xc38::zimbracommand { "zmlocalconfig -e comcast_lite_skyscraper_width_threshold=1280":}->
+res_zimbra::zimbra_server::xc38::zimbracommand { "zmzimletctl -l configure /opt/zimbra/zimlets-deployed/comcast_msgcontact/config_template.xml": }
+
+
+
+if ($fqdn =~ /resmail/) or ($fqdn =~ /respmail/)
+{
+ file { "/var/tmp/XC38_backups/":
+          ensure  => "directory",
+     }->
+
+ file { "/opt/zimbra-installer/xc38_package/":
+          ensure  => "directory",
+     }->
+
+	 
+	 
+	 
+	 
+[root@respoller-ch2d-01c ~]# ll /data/nagios/pnp/etc/spdb_meta_data.cfg
+-rw-r--r-- 1 icinga icinga 2031 Sep  9 13:27 /data/nagios/pnp/etc/spdb_meta_data.cfg
+
+644
+
+
+
+[root@respoller-ch2d-01c ~]# ll /etc/sysconfig/pnp_go_conf
+-rw-r--r-- 1 root root 5850 Sep  9 13:27 /etc/sysconfig/pnp_go_conf;
+
+644
+
+[root@respoller-ch2d-01c ~]# ll /usr/local/spdb_gateway/spdb_gateway.wpmon
+-rwxr-xr-x 1 nobody nobody 238 Sep  8 14:46 /usr/local/spdb_gateway/spdb_gateway.wpmon
+
+755
+
+[root@respoller-ch2d-01c ~]# ll /etc/sysconfig/pnp_go_spdb_gateway
+-rw-r--r-- 1 root root 608 Sep  9 13:20 /etc/sysconfig/pnp_go_spdb_gateway
+
+644
+
+
+[root@respoller-ch2d-01c ~]# ll /etc/wpmon.d/spdb_gateway.cfg
+-rw-r--r-- 1 root root 296 Sep  9 14:16 /etc/wpmon.d/spdb_gateway.cfg
+
+644
+
+[root@respoller-ch2d-01c ~]# ll /etc/spdb_gateway.d/pnp_go.cfg
+-rw-r--r-- 1 root root 69 Sep  9 14:25 /etc/spdb_gateway.d/pnp_go.cfg
+
+644

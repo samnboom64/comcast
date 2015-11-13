@@ -1,0 +1,185 @@
+ sudo tail -f /var/log/icinga2/icinga2.log
+ sudo /etc/init.d/icinga2 start
+ 
+ sudo icinga2 feature list
+
+ sudo vim /etc/icinga2/zones.conf
+ 
+
+
+Troubleshoot
+============================
+sudo tcpdump -n port 5665 -i any
+
+
+check_command
+=====================
+
+
+sudo -u icinga /usr/lib/nagios/plugins/check_ping -4 -H 127.0.0.1 -c 5000,100% -w 3000,80%
+
+
+
+===========================================================================================
+-sh-4.1$  cat /etc/yum.repos.d/ICINGA-release.repo
+============================================================================================
+[icinga-stable-release]
+name=ICINGA (stable release for epel)
+baseurl=http://copasp-po-b01p.sys.comcast.net:38253/resemail/x86_64/6/icinga2/
+enabled=1
+gpgcheck=0
+
+
+
+=====================================================================================================
+-sh-4.1$ sudo ls -ltrh /etc/icinga2
+=====================================================================================================
+total 88K
+-rw-r----- 1 icinga icinga  160 Feb 23 20:54 constants.conf
+drwxr-xr-x 2 icinga icinga 4.0K Apr  7 15:29 pki
+-rw-r----- 1 icinga icinga  164 Apr 20 13:00 init.conf
+-rw-r----- 1 icinga icinga 1.5K Apr 20 13:00 icinga2.conf
+drwxr-x--- 2 icinga icinga 4.0K Apr 20 18:48 repository.d
+drwxr-x--- 2 icinga icinga 4.0K Apr 28 12:53 features-available
+drwxr-x--- 2 icinga icinga 4.0K May  1 13:54 scripts
+drwxr-x--- 2 icinga icinga 4.0K May  6 19:35 features-enabled
+drwxr-x--- 5 icinga icinga 4.0K May  7 18:03 zones.d
+drwxr-x--- 2 icinga icinga 4.0K Jun 12 10:52 conf.d
+-rw-r----- 1 icinga icinga 1.1K Jun 15 10:55 zones.conf
+
+
+========================================================================================================
+ -sh-4.1$ sudo cat /etc/icinga2/zones.conf
+========================================================================================================
+object Zone "global-templates" {
+  global = true
+}
+
+## master zone
+object Zone "res-master" {
+  endpoints = [ "restool-ch2d-04c","restool-cmcd-04c" ]
+}
+
+object Endpoint "restool-ch2d-04c" {
+  host = "restool-ch2d-04c.sys.comcast.net"
+}
+
+object Endpoint "restool-cmcd-04c" {
+  host = "restool-cmcd-04c.sys.comcast.net"
+}
+
+
+## east zone
+object Zone "res-east-ch2d" {
+  endpoints = [ "respoller-ch2d-01c","respoller-ch2d-02c" , "respoller-ch2d-03c"]
+  parent = "res-master"
+}
+
+object Endpoint "respoller-ch2d-01c" {
+  host = "respoller-ch2d-01c.sys.comcast.net"
+}
+
+object Endpoint "respoller-ch2d-02c" {
+  host = "respoller-ch2d-02c.sys.comcast.net"
+}
+
+object Endpoint "respoller-ch2d-03c" {
+  host = "respoller-ch2d-03c.sys.comcast.net"
+}
+
+
+## west zone
+object Zone "res-west-cmcd" {
+  endpoints = [ "respoller-cmcd-01c","respoller-cmcd-02c" ]
+  parent = "res-master"
+}
+
+object Endpoint "respoller-cmcd-01c" {
+  host = "respoller-cmcd-01c.sys.comcast.net"
+}
+
+object Endpoint "respoller-cmcd-02c" {
+  host = "respoller-cmcd-02c.sys.comcast.net"
+}
+
+
+
+
+=================================================================================
+-sh-4.1$ sudo ls -ltrh /etc/icinga2/pki
+=================================================================================
+total 24K
+-rw-r--r-- 1 root   root   1.7K Apr 13 18:04 ca.crt.orig
+-rw-r--r-- 1 root   root   1.7K Apr 13 18:04 restool-cmcd-04c.crt.orig
+-rw------- 1 root   root   3.2K Apr 13 18:05 restool-cmcd-04c.key.orig
+-rw-r--r-- 1 icinga icinga 1.7K Apr 13 18:10 ca.crt
+-rw-r--r-- 1 icinga icinga 1.7K Apr 13 18:14 restool-cmcd-04c.crt
+-rw------- 1 icinga icinga 3.2K Apr 13 18:14 restool-cmcd-04c.key
+
+==================================================================================
+-sh-4.1$ sudo cat /etc/icinga2/icinga2.conf
+===================================================================================
+[sudo] password for skumar063c:
+
+include "constants.conf"
+include "zones.conf"
+include <itl>
+include <plugins>
+// include <plugins-contrib>
+include "features-enabled/*.conf"
+include_recursive "repository.d"
+
+//COMMENT BELOW IF NOT MASTER
+//include_recursive "conf.d"
+
+
+=====================================================================================
+-sh-4.1$ sudo cat /etc/icinga2/features-enabled/api.conf
+======================================================================================
+/**
+ * The API listener is used for distributed monitoring setups.
+ */
+
+object ApiListener "api" {
+  cert_path = SysconfDir + "/icinga2/pki/" + NodeName + ".crt"
+  key_path = SysconfDir + "/icinga2/pki/" + NodeName + ".key"
+  ca_path = SysconfDir + "/icinga2/pki/ca.crt"
+  accept_config = true                
+  accept_commands = true
+  ticket_salt = TicketSalt
+}
+
+
+
+
+STEPS FOR PUPPET CONFIGURATION:
+1)Creating /etc/yum.repos.d/ICINGA-release.repo file for new Icinga Repo
+2)Install require RPMs
+3)Generate/copy CA certificates under dir /etc/icinga2/pki
+icinga2 node wizard
+4)/etc/icinga2/constants.conf creation as per hostname,basically copy as per puppet file location
+5)Edit /etc/icinga2/icinga2.conf from local puppet file different for puppet master
+6)Edit zones.conf from local puppet files that is common for all cluster nodes
+7)Copy recursively all zones files to /etc/icinga2/zones.d/ for synchronizing all check as per zones configured
+8)Enable the api/command features 
+icinga2 feature enable api (important for cluster)
+9)Installation of mysql server and ido rpm
+10)create database with user icinga abd DB icinga
+11)import mysql.sql database dump to database icinga
+
+
+
+
+
+
+installation ->cerficates->
+
+
+
+
+
+
+
+
+
+

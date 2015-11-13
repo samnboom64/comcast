@@ -1,0 +1,65 @@
+
+
+icinga2::pnp_go_inst::packages:
+                 a:
+                     rpm: wpmon
+                 b: 
+                     rpm: spdb_gateway
+                 c: 
+                      rpm: pnp_go
+								
+								
+icinga2::pnp_go_inst::feature: 
+				a:  
+					feature:  perfdata								
+      
+icinga2::pnp_go_inst::files:
+                spdb_meta_data_conf: 
+                        files: /data/nagios/pnp/etc/spdb_meta_data.cfg
+                        user: icinga
+                        mode: "644"
+						source: "puppet:///modules/icinga2/data/nagios/pnp/etc/spdb_meta_data.cfg"
+                pnp_go_conf:
+                        files: /etc/sysconfig/pnp_go_conf
+                        user: root
+                        mode: "644"
+						source: "puppet:///modules/icinga2/etc/sysconfig/pnp_go_conf"
+                spdb_gateway.wpmon_conf:       
+                        files: /usr/local/spdb_gateway/spdb_gateway.wpmon
+                        user: icinga
+                        mode: "755"  
+					    source: "puppet:///modules/icinga2/usr/local/spdb_gateway/spdb_gateway.wpmon"
+				pnp_go_spdb_gateway_conf:
+                        files: /etc/sysconfig/pnp_go_spdb_gateway
+                        user: root
+                        mode: "644"
+						source: "puppet:///modules/icinga2/etc/sysconfig/pnp_go_spdb_gateway"
+				spdb_gateway_conf:
+                        files: /etc/wpmon.d/spdb_gateway.cfg
+                        user: root
+                        mode: "644"
+						source: "puppet:///modules/icinga2/etc/wpmon.d/spdb_gateway.cfg"
+				pnp_go_cfg:
+                        files: /etc/spdb_gateway.d/pnp_go.cfg
+                        user: root
+                        mode: "644"
+						source: "puppet:///modules/icinga2/etc/spdb_gateway.d/pnp_go.cfg"
+				perfdata_conf:
+                        files: /etc/icinga2/features-enabled/perfdata.conf
+                        user: root
+                        mode: "640"
+						source: "puppet:///modules/icinga2/etc/icinga2/features-enabled/perfdata.conf"
+				spdb_gateway:
+                        files: /etc/init.d/spdb_gateway
+                        user: root
+                        mode: "644"
+						source: "/usr/local/spdb_gateway/spdb_gateway.service"
+						
+icinga2::pnp_go_inst::folder_perm:
+				a:
+				   folder: /data/nagios/pnp
+				b:	
+				   folder: /var/log/spdb_gateway
+				c:
+				   folder: /var/opt/spdb_gateway
+						

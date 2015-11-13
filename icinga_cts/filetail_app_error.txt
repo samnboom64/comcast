@@ -1,0 +1,26 @@
+
+
+ll /opt/comcast/httpd/logs/access_log
+ll /opt/comcast/nrpe/plugins/logmetrics/tmp/pref_err_mon.log
+ll /opt/comcast/nrpe/plugins/logmetrics/tmp/pref_err_mon.run
+ll /opt/comcast/tomcat/logs/catalina.out
+ll /opt/comcast/nrpe/plugins/logmetrics/tmp/cat_mon.log
+ll /opt/comcast/nrpe/plugins/logmetrics/tmp/pref_err_mon.run
+ll /opt/comcast/httpd/logs/res_access_log
+ll /opt/comcast/nrpe/plugins/logmetrics/tmp/res_access_err_mon.log
+ll /opt/comcast/nrpe/plugins/logmetrics/tmp/res_access_err_mon.run
+ll /opt/comcast/tomcat/logs/optimus.log
+ll /opt/comcast/nrpe/plugins/logmetrics/tmp/optimus_error_mon.log
+ll /opt/comcast/nrpe/plugins/logmetrics/tmp/optimus_errormon.run
+
+
+
+-sh-4.1$ grep -R  check_pref_app_errors /opt/comcast/nrpe/etc/*
+/opt/comcast/nrpe/etc/nrpe.cfg:command[check_pref_app_errors]=/opt/comcast/nrpe/plugins/logmetrics/bin/fileTail.pl -c /opt/comcast/nrpe/plugins/logmetrics/etc/pref_errors_monitor.cfg
+
+access.dirwildcard=/opt/comcast/httpd/logs/access_log
+access.disablewildcard=true
+access.logfilename=/opt/comcast/nrpe/plugins/logmetrics/tmp/pref_err_mon.log
+access.runfile=/opt/comcast/nrpe/plugins/logmetrics/tmp/pref_err_mon.run
+access.logformat=echo '*'
+access.greppattern1=-i 'HTTP\/1\.1" 5' $logfile | wc -l||Responses5xx||10,gt||15,gt||S

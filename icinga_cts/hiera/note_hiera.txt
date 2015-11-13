@@ -1,0 +1,25 @@
+
+
+Use absolute top-scope notation (i.e. %{::clientcert} instead of %{clientcert}) in Hiera’s 
+config files to avoid accidentally accessing a local variable instead of a top-scope one.
+
+
+
+
+
+If a value is found:
+In a normal (priority) lookup, Hiera will stop at the first data source with the requested data and return that value.
+In an array lookup, Hiera will continue, then return all of the discovered values as a flattened array. Values from higher 
+in the hierarchy will be the first elements in the array, and values from lower will be later.
+In a hash lookup, Hiera will continue, expecting every value to be a hash and throwing an error if any non-hash values are 
+discovered. It will then merge all of the discovered hashes and return the result, allowing values from higher in the hierarchy to replace values from lower.
+
+hiera('')
+hiera_array('')
+hiera_hash('')
+
+
+If Hiera goes through the entire hierarchy without finding a value, it will use the default value if one was provided, or fail with an error if one wasn’t.
+
+hiera('',defaultvalue)
+

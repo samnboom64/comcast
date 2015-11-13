@@ -1,0 +1,63 @@
+-sh-4.1$ hiera -c ../hiera.yaml keepalived ::clientcert=restool-cmcd-02c.sys.comcast.net -d
+DEBUG: Thu Aug 27 16:47:59 +0000 2015: Hiera YAML backend starting
+DEBUG: Thu Aug 27 16:47:59 +0000 2015: Looking up keepalived in YAML backend
+DEBUG: Thu Aug 27 16:47:59 +0000 2015: Looking for data source restool-cmcd-02c.sys.comcast.net
+DEBUG: Thu Aug 27 16:47:59 +0000 2015: Cannot find datafile /home/skumar063c/magnato/hieradata/restool-cmcd-02c.sys.comcast.net.yaml, skipping
+DEBUG: Thu Aug 27 16:47:59 +0000 2015: Looking for data source common
+DEBUG: Thu Aug 27 16:47:59 +0000 2015: Cannot find datafile /home/skumar063c/magnato/hieradata/common.yaml, skipping
+nil
+-sh-4.1$ hiera -c ../hiera.yaml keepalived ::clientcert=restool-cmcd-01c.sys.comcast.net -d
+DEBUG: Thu Aug 27 16:48:32 +0000 2015: Hiera YAML backend starting
+DEBUG: Thu Aug 27 16:48:32 +0000 2015: Looking up keepalived in YAML backend
+DEBUG: Thu Aug 27 16:48:32 +0000 2015: Looking for data source restool-cmcd-01c.sys.comcast.net
+DEBUG: Thu Aug 27 16:48:32 +0000 2015: Found keepalived in restool-cmcd-01c.sys.comcast.net
+{"reshaproxy-fxbo-01c.email.comcast.net"=>{"lb_instance"=>"reshaprox-fxbo-01c-prod-01a", "floating_ip"=>"96.119.1.67/32", "broadcast"=>"96.119.3.255", "floating_ip_v6"=>"2001:558:fc00:100:f816:3eff:feee:ff7", "v_router_id"=>"01", "state"=>"MASTER", "vrrp_instance"=>"res_haproxy_prod_01", "priority"=>100, "peer_ip"=>"96.119.1.211"}, "reshaproxy-fxbo-02c.email.comcast.net"=>{"lb_instance"=>"reshaprox-fxbo-02c-prod-01b", "floating_ip"=>"96.119.1.67/32", "broadcast"=>"96.119.3.255", "floating_ip_v6"=>"2001:558:fc00:100:f816:3eff:feee:ff7", "v_router_id"=>"01", "state"=>"BACKUP", "vrrp_instance"=>"res_haproxy_prod_01", "priority"=>50, "peer_ip"=>"96.119.2.198"}}
+-sh-4.1$ hiera -c ../hiera.yaml keepalived ::clientcert=restool-cmcd-03c.sys.comcast.net -d
+DEBUG: Thu Aug 27 16:48:38 +0000 2015: Hiera YAML backend starting
+DEBUG: Thu Aug 27 16:48:38 +0000 2015: Looking up keepalived in YAML backend
+DEBUG: Thu Aug 27 16:48:38 +0000 2015: Looking for data source restool-cmcd-03c.sys.comcast.net
+DEBUG: Thu Aug 27 16:48:38 +0000 2015: Cannot find datafile /home/skumar063c/magnato/hieradata/restool-cmcd-03c.sys.comcast.net.yaml, skipping
+DEBUG: Thu Aug 27 16:48:38 +0000 2015: Looking for data source common
+DEBUG: Thu Aug 27 16:48:38 +0000 2015: Cannot find datafile /home/skumar063c/magnato/hieradata/common.yaml, skipping
+
+
+
+
+
+TO debug custome facts from agent
+
+
+[root@resddsa-ch2-01p ~]#  FACTERLIB=/var/lib/puppet/lib/facter facter|grep array
+dsa_array => ["sw1_mail_g2_ch2p1", "sw1_edge_g1_ch2p1", "sw1_edge_g0_ch2p1", "sw1_edge_g2_ch2p1", "sw1_mail_g1_ch2p1", "sw1_mail_g0_ch2p1"]
+[root@resddsa-ch2-01p ~]#
+
+
+
+
+
+[root@respoller-ch2d-03c ~]# hiera  classes ::system_role=respoller ::clientcert=respoller-ch2d-03c.sys.comcast.net -d
+DEBUG: Fri Nov 13 09:24:55 +0000 2015: Hiera YAML backend starting
+DEBUG: Fri Nov 13 09:24:55 +0000 2015: Looking up classes in YAML backend
+DEBUG: Fri Nov 13 09:24:55 +0000 2015: Looking for data source respoller-ch2d-03c.sys.comcast.net
+DEBUG: Fri Nov 13 09:24:55 +0000 2015: Cannot find datafile /home/skumar063c/data/respoller-ch2d-03c.sys.comcast.net.yaml, skipping
+DEBUG: Fri Nov 13 09:24:55 +0000 2015: Looking for data source respoller/respoller-ch2d-03c.sys.comcast.net
+DEBUG: Fri Nov 13 09:24:55 +0000 2015: Found classes in respoller/respoller-ch2d-03c.sys.comcast.net
+["icinga2::icinga_installation"]
+[root@respoller-ch2d-03c ~]#
+[root@respoller-ch2d-03c ~]#
+[root@respoller-ch2d-03c ~]#
+[root@respoller-ch2d-03c ~]# cat /etc/hiera.yaml
+--.
+:backends:
+  - yaml
+:yaml:
+  :datadir: /home/skumar063c/data
+:hierarchy:
+ - "%{::clientcert}"
+ - "%{::environment}"
+ - "%{::system_role}/%{::clientcert}"
+ - "%{::system_role}/%{::location}/common"
+ - "%{::system_role}/common"
+ - common
+[root@respoller-ch2d-03c ~]#
+

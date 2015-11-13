@@ -1,0 +1,195 @@
+[profile:dxProcCounts]
+ { "name": "dxProcCounts", "cmd": "/usr/local/bin/dxProcCounts.pl", "user": "dsa", "groups": "etrdir", "period": 300, "node_types": {"res_email": 3} }
+
+
+
+
+[profile:dxSNMPStats]
+ { "name": "dxSNMPStats", "cmd": "/usr/local/bin/dxSNMPStats.pl", "user": "dsa", "groups": "etrdir", "period": 300, "node_types": {"res_email": 3} }
+
+
+
+
+[profile:updateLogGLM_sw1_mail_g2_ch2p1]
+ { "name": "queryLogGLM_sw1_mail_g2_ch2p1", "cmd": "/usr/local/bin/glm.pl", "cmd_args": "-s /var/tmp/glm-sw1_mail_g2_ch2p1_update.state", "user": "dsa", "groups": "etrdir", "node_types": {"res_email" :3}, "config": { "directory": "/dxlogs/local-update", "log_regex": "^sw1_mail_g2_ch2p1", "scans": [ { "name": "updateOps", "regex": "^\\[\\d+\\] ([0-9.]+).*(MOD|ADD|REM)", "actions": [ { "series_key": "res_email#dxserver~%HOSTNAME~sw1_mail_g2_ch2p1#dsaModifyEntryOps~300~raw", "ts": "dxserver %CAPTR1", "if": "%CAPTR2 ^MOD" }, { "series_key": "res_email#dxserver~%HOSTNAME~sw1_mail_g2_ch2p1#dsaAddEntryOps~300~raw", "ts": "dxserver %CAPTR1", "if": "%CAPTR2 ^ADD" }, { "series_key": "res_email#dxserver~%HOSTNAME~sw1_mail_g2_ch2p1#dsaRemoveEntryOps~300~raw", "ts": "dxserver %CAPTR1", "if": "%CAPTR2 ^REM" }] } ] } }
+
+
+[profile:slowSearchTimeLogGLM_sw1_mail_g2_ch2p1]
+ { "name": "slowSearchTimeLogGLM_sw1_mail_g2_ch2p1", "cmd": "/usr/local/bin/glm.pl", "cmd_args": "-s /var/tmp/glm-sw1_mail_g2_ch2p1_slowSearchTime.state", "user": "dsa", "groups": "etrdir", "node_types": {"res_email" :3}, "config": { "directory": "/opt/CA/eTrustDirectory/dxserver/logs/time", "log_regex": "^sw1_mail_g2_ch2p1", "scans": [ { "name": "searchResults", "regex": "\\[\\d+\\] ([0-9.]+) #[0-9.]+ TIME : SEARCH (\\d+) msecs", "actions": [{ "series_key": "res_email#dxserver~%HOSTNAME~sw1_mail_g2_ch2p1#ResponseTimeMS~300~_stat", "ts": "dxserver %CAPTR1", "stats": "%CAPTR2 sum,amean,median,90th,max,min,stddev"}, {"series_key": "res_email#dxserver~%HOSTNAME~sw1_mail_g2_ch2p1#ResponseTimeCount~300~raw", "ts": "dxserver %CAPTR1" }] } ] } }
+
+[profile:slowSearchQueryLogGLM_sw1_mail_g2_ch2p1]
+ { "name": "slowSearchQueryLogGLM_sw1_mail_g2_ch2p1", "cmd": "/usr/local/bin/glm.pl", "cmd_args": "-s /var/tmp/glm-sw1_mail_g2_ch2p1_slowSearchQuery.state", "user": "dsa", "groups": "etrdir", "node_types": {"res_email" :3}, "config": { "directory": "/dxlogs/query", "log_regex": "^sw1_mail_g2_ch2p1", "scans": [ { "name": "slowSearchQuery", "regex": "\\[\\d+\\] ([0-9.]+) SEARCH.*filter=(.*)$", "xforms": [ { "var": "%CAPTR2", "from": "\\(zimbraId=.*?\\)", "to": "(zimbraId=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraDomainName=.*?\\)", "to": "(zimbraDomainName=*)" }, { "var": "%CAPTR2", "from": "(\\(zimbraACE=.*?\\))+", "to": "(zimbraACE=*)+" }, { "var": "%CAPTR2", "from": "\\(zimbraServiceHostname=.*?\\)", "to": "(zimbraServiceHostname=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraServiceEnabled=.*?\\)", "to": "(zimbraServiceEnabled=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraVirtualHostname=.*?\\)", "to": "(zimbraVirtualHostname=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraMailDeliveryAddress=.*?\\)", "to": "(zimbraMailDeliveryAddress=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraMailAlias=.*?\\)", "to": "(zimbraMailAlias=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraMimeType=.*?\\)", "to": "(zimbraMimeType=*)" }, { "var": "%CAPTR2", "from": "\\(mail=.*?\\)", "to": "(mail=*)" }, { "var": "%CAPTR2", "from": "\\(cn=.*?\\)", "to": "(cn=*)" } ], "actions": [{ "series_key": "res_email#dxserver~sw1_mail_g2_ch2p1.%HOSTNAME~%CAPTR2#dsaSearchOps~300~raw", "ts": "dxserver %CAPTR1" }] } ] } }
+
+[profile:updateLogGLM_sw1_edge_g1_ch2p1]
+ { "name": "queryLogGLM_sw1_edge_g1_ch2p1", "cmd": "/usr/local/bin/glm.pl", "cmd_args": "-s /var/tmp/glm-sw1_edge_g1_ch2p1_update.state", "user": "dsa", "groups": "etrdir", "node_types": {"res_email" :3}, "config": { "directory": "/dxlogs/local-update", "log_regex": "^sw1_edge_g1_ch2p1", "scans": [ { "name": "updateOps", "regex": "^\\[\\d+\\] ([0-9.]+).*(MOD|ADD|REM)", "actions": [ { "series_key": "res_email#dxserver~%HOSTNAME~sw1_edge_g1_ch2p1#dsaModifyEntryOps~300~raw", "ts": "dxserver %CAPTR1", "if": "%CAPTR2 ^MOD" }, { "series_key": "res_email#dxserver~%HOSTNAME~sw1_edge_g1_ch2p1#dsaAddEntryOps~300~raw", "ts": "dxserver %CAPTR1", "if": "%CAPTR2 ^ADD" }, { "series_key": "res_email#dxserver~%HOSTNAME~sw1_edge_g1_ch2p1#dsaRemoveEntryOps~300~raw", "ts": "dxserver %CAPTR1", "if": "%CAPTR2 ^REM" }] } ] } }
+
+[profile:slowSearchTimeLogGLM_sw1_edge_g1_ch2p1]
+ { "name": "slowSearchTimeLogGLM_sw1_edge_g1_ch2p1", "cmd": "/usr/local/bin/glm.pl", "cmd_args": "-s /var/tmp/glm-sw1_edge_g1_ch2p1_slowSearchTime.state", "user": "dsa", "groups": "etrdir", "node_types": {"res_email" :3}, "config": { "directory": "/opt/CA/eTrustDirectory/dxserver/logs/time", "log_regex": "^sw1_edge_g1_ch2p1", "scans": [ { "name": "searchResults", "regex": "\\[\\d+\\] ([0-9.]+) #[0-9.]+ TIME : SEARCH (\\d+) msecs", "actions": [{ "series_key": "res_email#dxserver~%HOSTNAME~sw1_edge_g1_ch2p1#ResponseTimeMS~300~_stat", "ts": "dxserver %CAPTR1", "stats": "%CAPTR2 sum,amean,median,90th,max,min,stddev"}, {"series_key": "res_email#dxserver~%HOSTNAME~sw1_edge_g1_ch2p1#ResponseTimeCount~300~raw", "ts": "dxserver %CAPTR1" }] } ] } }
+
+[profile:slowSearchQueryLogGLM_sw1_edge_g1_ch2p1]
+ { "name": "slowSearchQueryLogGLM_sw1_edge_g1_ch2p1", "cmd": "/usr/local/bin/glm.pl", "cmd_args": "-s /var/tmp/glm-sw1_edge_g1_ch2p1_slowSearchQuery.state", "user": "dsa", "groups": "etrdir", "node_types": {"res_email" :3}, "config": { "directory": "/dxlogs/query", "log_regex": "^sw1_edge_g1_ch2p1", "scans": [ { "name": "slowSearchQuery", "regex": "\\[\\d+\\] ([0-9.]+) SEARCH.*filter=(.*)$", "xforms": [ { "var": "%CAPTR2", "from": "\\(zimbraId=.*?\\)", "to": "(zimbraId=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraDomainName=.*?\\)", "to": "(zimbraDomainName=*)" }, { "var": "%CAPTR2", "from": "(\\(zimbraACE=.*?\\))+", "to": "(zimbraACE=*)+" }, { "var": "%CAPTR2", "from": "\\(zimbraServiceHostname=.*?\\)", "to": "(zimbraServiceHostname=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraServiceEnabled=.*?\\)", "to": "(zimbraServiceEnabled=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraVirtualHostname=.*?\\)", "to": "(zimbraVirtualHostname=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraMailDeliveryAddress=.*?\\)", "to": "(zimbraMailDeliveryAddress=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraMailAlias=.*?\\)", "to": "(zimbraMailAlias=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraMimeType=.*?\\)", "to": "(zimbraMimeType=*)" }, { "var": "%CAPTR2", "from": "\\(mail=.*?\\)", "to": "(mail=*)" }, { "var": "%CAPTR2", "from": "\\(cn=.*?\\)", "to": "(cn=*)" } ], "actions": [{ "series_key": "res_email#dxserver~sw1_edge_g1_ch2p1.%HOSTNAME~%CAPTR2#dsaSearchOps~300~raw", "ts": "dxserver %CAPTR1" }] } ] } }
+
+[profile:updateLogGLM_sw1_edge_g0_ch2p1]
+ { "name": "queryLogGLM_sw1_edge_g0_ch2p1", "cmd": "/usr/local/bin/glm.pl", "cmd_args": "-s /var/tmp/glm-sw1_edge_g0_ch2p1_update.state", "user": "dsa", "groups": "etrdir", "node_types": {"res_email" :3}, "config": { "directory": "/dxlogs/local-update", "log_regex": "^sw1_edge_g0_ch2p1", "scans": [ { "name": "updateOps", "regex": "^\\[\\d+\\] ([0-9.]+).*(MOD|ADD|REM)", "actions": [ { "series_key": "res_email#dxserver~%HOSTNAME~sw1_edge_g0_ch2p1#dsaModifyEntryOps~300~raw", "ts": "dxserver %CAPTR1", "if": "%CAPTR2 ^MOD" }, { "series_key": "res_email#dxserver~%HOSTNAME~sw1_edge_g0_ch2p1#dsaAddEntryOps~300~raw", "ts": "dxserver %CAPTR1", "if": "%CAPTR2 ^ADD" }, { "series_key": "res_email#dxserver~%HOSTNAME~sw1_edge_g0_ch2p1#dsaRemoveEntryOps~300~raw", "ts": "dxserver %CAPTR1", "if": "%CAPTR2 ^REM" }] } ] } }
+
+[profile:slowSearchTimeLogGLM_sw1_edge_g0_ch2p1]
+ { "name": "slowSearchTimeLogGLM_sw1_edge_g0_ch2p1", "cmd": "/usr/local/bin/glm.pl", "cmd_args": "-s /var/tmp/glm-sw1_edge_g0_ch2p1_slowSearchTime.state", "user": "dsa", "groups": "etrdir", "node_types": {"res_email" :3}, "config": { "directory": "/opt/CA/eTrustDirectory/dxserver/logs/time", "log_regex": "^sw1_edge_g0_ch2p1", "scans": [ { "name": "searchResults", "regex": "\\[\\d+\\] ([0-9.]+) #[0-9.]+ TIME : SEARCH (\\d+) msecs", "actions": [{ "series_key": "res_email#dxserver~%HOSTNAME~sw1_edge_g0_ch2p1#ResponseTimeMS~300~_stat", "ts": "dxserver %CAPTR1", "stats": "%CAPTR2 sum,amean,median,90th,max,min,stddev"}, {"series_key": "res_email#dxserver~%HOSTNAME~sw1_edge_g0_ch2p1#ResponseTimeCount~300~raw", "ts": "dxserver %CAPTR1" }] } ] } }
+
+[profile:slowSearchQueryLogGLM_sw1_edge_g0_ch2p1]
+ { "name": "slowSearchQueryLogGLM_sw1_edge_g0_ch2p1", "cmd": "/usr/local/bin/glm.pl", "cmd_args": "-s /var/tmp/glm-sw1_edge_g0_ch2p1_slowSearchQuery.state", "user": "dsa", "groups": "etrdir", "node_types": {"res_email" :3}, "config": { "directory": "/dxlogs/query", "log_regex": "^sw1_edge_g0_ch2p1", "scans": [ { "name": "slowSearchQuery", "regex": "\\[\\d+\\] ([0-9.]+) SEARCH.*filter=(.*)$", "xforms": [ { "var": "%CAPTR2", "from": "\\(zimbraId=.*?\\)", "to": "(zimbraId=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraDomainName=.*?\\)", "to": "(zimbraDomainName=*)" }, { "var": "%CAPTR2", "from": "(\\(zimbraACE=.*?\\))+", "to": "(zimbraACE=*)+" }, { "var": "%CAPTR2", "from": "\\(zimbraServiceHostname=.*?\\)", "to": "(zimbraServiceHostname=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraServiceEnabled=.*?\\)", "to": "(zimbraServiceEnabled=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraVirtualHostname=.*?\\)", "to": "(zimbraVirtualHostname=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraMailDeliveryAddress=.*?\\)", "to": "(zimbraMailDeliveryAddress=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraMailAlias=.*?\\)", "to": "(zimbraMailAlias=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraMimeType=.*?\\)", "to": "(zimbraMimeType=*)" }, { "var": "%CAPTR2", "from": "\\(mail=.*?\\)", "to": "(mail=*)" }, { "var": "%CAPTR2", "from": "\\(cn=.*?\\)", "to": "(cn=*)" } ], "actions": [{ "series_key": "res_email#dxserver~sw1_edge_g0_ch2p1.%HOSTNAME~%CAPTR2#dsaSearchOps~300~raw", "ts": "dxserver %CAPTR1" }] } ] } }
+
+[profile:updateLogGLM_sw1_edge_g2_ch2p1]
+ { "name": "queryLogGLM_sw1_edge_g2_ch2p1", "cmd": "/usr/local/bin/glm.pl", "cmd_args": "-s /var/tmp/glm-sw1_edge_g2_ch2p1_update.state", "user": "dsa", "groups": "etrdir", "node_types": {"res_email" :3}, "config": { "directory": "/dxlogs/local-update", "log_regex": "^sw1_edge_g2_ch2p1", "scans": [ { "name": "updateOps", "regex": "^\\[\\d+\\] ([0-9.]+).*(MOD|ADD|REM)", "actions": [ { "series_key": "res_email#dxserver~%HOSTNAME~sw1_edge_g2_ch2p1#dsaModifyEntryOps~300~raw", "ts": "dxserver %CAPTR1", "if": "%CAPTR2 ^MOD" }, { "series_key": "res_email#dxserver~%HOSTNAME~sw1_edge_g2_ch2p1#dsaAddEntryOps~300~raw", "ts": "dxserver %CAPTR1", "if": "%CAPTR2 ^ADD" }, { "series_key": "res_email#dxserver~%HOSTNAME~sw1_edge_g2_ch2p1#dsaRemoveEntryOps~300~raw", "ts": "dxserver %CAPTR1", "if": "%CAPTR2 ^REM" }] } ] } }
+
+[profile:slowSearchTimeLogGLM_sw1_edge_g2_ch2p1]
+ { "name": "slowSearchTimeLogGLM_sw1_edge_g2_ch2p1", "cmd": "/usr/local/bin/glm.pl", "cmd_args": "-s /var/tmp/glm-sw1_edge_g2_ch2p1_slowSearchTime.state", "user": "dsa", "groups": "etrdir", "node_types": {"res_email" :3}, "config": { "directory": "/opt/CA/eTrustDirectory/dxserver/logs/time", "log_regex": "^sw1_edge_g2_ch2p1", "scans": [ { "name": "searchResults", "regex": "\\[\\d+\\] ([0-9.]+) #[0-9.]+ TIME : SEARCH (\\d+) msecs", "actions": [{ "series_key": "res_email#dxserver~%HOSTNAME~sw1_edge_g2_ch2p1#ResponseTimeMS~300~_stat", "ts": "dxserver %CAPTR1", "stats": "%CAPTR2 sum,amean,median,90th,max,min,stddev"}, {"series_key": "res_email#dxserver~%HOSTNAME~sw1_edge_g2_ch2p1#ResponseTimeCount~300~raw", "ts": "dxserver %CAPTR1" }] } ] } }
+
+[profile:slowSearchQueryLogGLM_sw1_edge_g2_ch2p1]
+ { "name": "slowSearchQueryLogGLM_sw1_edge_g2_ch2p1", "cmd": "/usr/local/bin/glm.pl", "cmd_args": "-s /var/tmp/glm-sw1_edge_g2_ch2p1_slowSearchQuery.state", "user": "dsa", "groups": "etrdir", "node_types": {"res_email" :3}, "config": { "directory": "/dxlogs/query", "log_regex": "^sw1_edge_g2_ch2p1", "scans": [ { "name": "slowSearchQuery", "regex": "\\[\\d+\\] ([0-9.]+) SEARCH.*filter=(.*)$", "xforms": [ { "var": "%CAPTR2", "from": "\\(zimbraId=.*?\\)", "to": "(zimbraId=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraDomainName=.*?\\)", "to": "(zimbraDomainName=*)" }, { "var": "%CAPTR2", "from": "(\\(zimbraACE=.*?\\))+", "to": "(zimbraACE=*)+" }, { "var": "%CAPTR2", "from": "\\(zimbraServiceHostname=.*?\\)", "to": "(zimbraServiceHostname=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraServiceEnabled=.*?\\)", "to": "(zimbraServiceEnabled=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraVirtualHostname=.*?\\)", "to": "(zimbraVirtualHostname=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraMailDeliveryAddress=.*?\\)", "to": "(zimbraMailDeliveryAddress=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraMailAlias=.*?\\)", "to": "(zimbraMailAlias=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraMimeType=.*?\\)", "to": "(zimbraMimeType=*)" }, { "var": "%CAPTR2", "from": "\\(mail=.*?\\)", "to": "(mail=*)" }, { "var": "%CAPTR2", "from": "\\(cn=.*?\\)", "to": "(cn=*)" } ], "actions": [{ "series_key": "res_email#dxserver~sw1_edge_g2_ch2p1.%HOSTNAME~%CAPTR2#dsaSearchOps~300~raw", "ts": "dxserver %CAPTR1" }] } ] } }
+
+[profile:updateLogGLM_sw1_mail_g1_ch2p1]
+ { "name": "queryLogGLM_sw1_mail_g1_ch2p1", "cmd": "/usr/local/bin/glm.pl", "cmd_args": "-s /var/tmp/glm-sw1_mail_g1_ch2p1_update.state", "user": "dsa", "groups": "etrdir", "node_types": {"res_email" :3}, "config": { "directory": "/dxlogs/local-update", "log_regex": "^sw1_mail_g1_ch2p1", "scans": [ { "name": "updateOps", "regex": "^\\[\\d+\\] ([0-9.]+).*(MOD|ADD|REM)", "actions": [ { "series_key": "res_email#dxserver~%HOSTNAME~sw1_mail_g1_ch2p1#dsaModifyEntryOps~300~raw", "ts": "dxserver %CAPTR1", "if": "%CAPTR2 ^MOD" }, { "series_key": "res_email#dxserver~%HOSTNAME~sw1_mail_g1_ch2p1#dsaAddEntryOps~300~raw", "ts": "dxserver %CAPTR1", "if": "%CAPTR2 ^ADD" }, { "series_key": "res_email#dxserver~%HOSTNAME~sw1_mail_g1_ch2p1#dsaRemoveEntryOps~300~raw", "ts": "dxserver %CAPTR1", "if": "%CAPTR2 ^REM" }] } ] } }
+
+[profile:slowSearchTimeLogGLM_sw1_mail_g1_ch2p1]
+ { "name": "slowSearchTimeLogGLM_sw1_mail_g1_ch2p1", "cmd": "/usr/local/bin/glm.pl", "cmd_args": "-s /var/tmp/glm-sw1_mail_g1_ch2p1_slowSearchTime.state", "user": "dsa", "groups": "etrdir", "node_types": {"res_email" :3}, "config": { "directory": "/opt/CA/eTrustDirectory/dxserver/logs/time", "log_regex": "^sw1_mail_g1_ch2p1", "scans": [ { "name": "searchResults", "regex": "\\[\\d+\\] ([0-9.]+) #[0-9.]+ TIME : SEARCH (\\d+) msecs", "actions": [{ "series_key": "res_email#dxserver~%HOSTNAME~sw1_mail_g1_ch2p1#ResponseTimeMS~300~_stat", "ts": "dxserver %CAPTR1", "stats": "%CAPTR2 sum,amean,median,90th,max,min,stddev"}, {"series_key": "res_email#dxserver~%HOSTNAME~sw1_mail_g1_ch2p1#ResponseTimeCount~300~raw", "ts": "dxserver %CAPTR1" }] } ] } }
+
+[profile:slowSearchQueryLogGLM_sw1_mail_g1_ch2p1]
+ { "name": "slowSearchQueryLogGLM_sw1_mail_g1_ch2p1", "cmd": "/usr/local/bin/glm.pl", "cmd_args": "-s /var/tmp/glm-sw1_mail_g1_ch2p1_slowSearchQuery.state", "user": "dsa", "groups": "etrdir", "node_types": {"res_email" :3}, "config": { "directory": "/dxlogs/query", "log_regex": "^sw1_mail_g1_ch2p1", "scans": [ { "name": "slowSearchQuery", "regex": "\\[\\d+\\] ([0-9.]+) SEARCH.*filter=(.*)$", "xforms": [ { "var": "%CAPTR2", "from": "\\(zimbraId=.*?\\)", "to": "(zimbraId=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraDomainName=.*?\\)", "to": "(zimbraDomainName=*)" }, { "var": "%CAPTR2", "from": "(\\(zimbraACE=.*?\\))+", "to": "(zimbraACE=*)+" }, { "var": "%CAPTR2", "from": "\\(zimbraServiceHostname=.*?\\)", "to": "(zimbraServiceHostname=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraServiceEnabled=.*?\\)", "to": "(zimbraServiceEnabled=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraVirtualHostname=.*?\\)", "to": "(zimbraVirtualHostname=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraMailDeliveryAddress=.*?\\)", "to": "(zimbraMailDeliveryAddress=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraMailAlias=.*?\\)", "to": "(zimbraMailAlias=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraMimeType=.*?\\)", "to": "(zimbraMimeType=*)" }, { "var": "%CAPTR2", "from": "\\(mail=.*?\\)", "to": "(mail=*)" }, { "var": "%CAPTR2", "from": "\\(cn=.*?\\)", "to": "(cn=*)" } ], "actions": [{ "series_key": "res_email#dxserver~sw1_mail_g1_ch2p1.%HOSTNAME~%CAPTR2#dsaSearchOps~300~raw", "ts": "dxserver %CAPTR1" }] } ] } }
+
+[profile:updateLogGLM_sw1_mail_g0_ch2p1]
+ { "name": "queryLogGLM_sw1_mail_g0_ch2p1", "cmd": "/usr/local/bin/glm.pl", "cmd_args": "-s /var/tmp/glm-sw1_mail_g0_ch2p1_update.state", "user": "dsa", "groups": "etrdir", "node_types": {"res_email" :3}, "config": { "directory": "/dxlogs/local-update", "log_regex": "^sw1_mail_g0_ch2p1", "scans": [ { "name": "updateOps", "regex": "^\\[\\d+\\] ([0-9.]+).*(MOD|ADD|REM)", "actions": [ { "series_key": "res_email#dxserver~%HOSTNAME~sw1_mail_g0_ch2p1#dsaModifyEntryOps~300~raw", "ts": "dxserver %CAPTR1", "if": "%CAPTR2 ^MOD" }, { "series_key": "res_email#dxserver~%HOSTNAME~sw1_mail_g0_ch2p1#dsaAddEntryOps~300~raw", "ts": "dxserver %CAPTR1", "if": "%CAPTR2 ^ADD" }, { "series_key": "res_email#dxserver~%HOSTNAME~sw1_mail_g0_ch2p1#dsaRemoveEntryOps~300~raw", "ts": "dxserver %CAPTR1", "if": "%CAPTR2 ^REM" }] } ] } }
+
+[profile:slowSearchTimeLogGLM_sw1_mail_g0_ch2p1]
+ { "name": "slowSearchTimeLogGLM_sw1_mail_g0_ch2p1", "cmd": "/usr/local/bin/glm.pl", "cmd_args": "-s /var/tmp/glm-sw1_mail_g0_ch2p1_slowSearchTime.state", "user": "dsa", "groups": "etrdir", "node_types": {"res_email" :3}, "config": { "directory": "/opt/CA/eTrustDirectory/dxserver/logs/time", "log_regex": "^sw1_mail_g0_ch2p1", "scans": [ { "name": "searchResults", "regex": "\\[\\d+\\] ([0-9.]+) #[0-9.]+ TIME : SEARCH (\\d+) msecs", "actions": [{ "series_key": "res_email#dxserver~%HOSTNAME~sw1_mail_g0_ch2p1#ResponseTimeMS~300~_stat", "ts": "dxserver %CAPTR1", "stats": "%CAPTR2 sum,amean,median,90th,max,min,stddev"}, {"series_key": "res_email#dxserver~%HOSTNAME~sw1_mail_g0_ch2p1#ResponseTimeCount~300~raw", "ts": "dxserver %CAPTR1" }] } ] } }
+
+[profile:slowSearchQueryLogGLM_sw1_mail_g0_ch2p1]
+ { "name": "slowSearchQueryLogGLM_sw1_mail_g0_ch2p1", "cmd": "/usr/local/bin/glm.pl", "cmd_args": "-s /var/tmp/glm-sw1_mail_g0_ch2p1_slowSearchQuery.state", "user": "dsa", "groups": "etrdir", "node_types": {"res_email" :3}, "config": { "directory": "/dxlogs/query", "log_regex": "^sw1_mail_g0_ch2p1", "scans": [ { "name": "slowSearchQuery", "regex": "\\[\\d+\\] ([0-9.]+) SEARCH.*filter=(.*)$", "xforms": [ { "var": "%CAPTR2", "from": "\\(zimbraId=.*?\\)", "to": "(zimbraId=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraDomainName=.*?\\)", "to": "(zimbraDomainName=*)" }, { "var": "%CAPTR2", "from": "(\\(zimbraACE=.*?\\))+", "to": "(zimbraACE=*)+" }, { "var": "%CAPTR2", "from": "\\(zimbraServiceHostname=.*?\\)", "to": "(zimbraServiceHostname=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraServiceEnabled=.*?\\)", "to": "(zimbraServiceEnabled=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraVirtualHostname=.*?\\)", "to": "(zimbraVirtualHostname=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraMailDeliveryAddress=.*?\\)", "to": "(zimbraMailDeliveryAddress=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraMailAlias=.*?\\)", "to": "(zimbraMailAlias=*)" }, { "var": "%CAPTR2", "from": "\\(zimbraMimeType=.*?\\)", "to": "(zimbraMimeType=*)" }, { "var": "%CAPTR2", "from": "\\(mail=.*?\\)", "to": "(mail=*)" }, { "var": "%CAPTR2", "from": "\\(cn=.*?\\)", "to": "(cn=*)" } ], "actions": [{ "series_key": "res_email#dxserver~sw1_mail_g0_ch2p1.%HOSTNAME~%CAPTR2#dsaSearchOps~300~raw", "ts": "dxserver %CAPTR1" }] } ] } }
+
+
+
+[profile:dxdsatime]
+{ "name": "dxdsatime", "cmd": "/opt/comcast/nrpe/plugins/check_dsa_time_search_hostmon.py", "user": "dsa", "groups": "etrdir", "period": 300, "node_types": {"res_email": 3} }
+
+[profile:dxdsamodifytime]
+{ "name": "dxdsamodifytime", "cmd": "/opt/comcast/nrpe/plugins/check_dsa_time_modify_hostmon.py", "user": "dsa", "groups": "etrdir", "period": 300, "node_types": {"res_email": 3} }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Residential Email Operations host
+id: cannot find name for group ID 25000
+-sh-4.1$ sudo su - dsa
+[sudo] password for csarka001c:
+[dsa@resddsa-po-05r.sys.comcast.net]
+[~]$ logout
+-sh-4.1$ sudo su - dsa
+[dsa@resddsa-po-05r.sys.comcast.net]
+[~]$ which dxserver
+~/bin/dxserver
+[dsa@resddsa-po-05r.sys.comcast.net]
+[~]$ pwd
+/opt/CA/eTrustDirectory/dxserver
+[dsa@resddsa-po-05r.sys.comcast.net]
+[~]$ logout
+-sh-4.1$ sudo su - dsa -c "/opt/CA/eTrustDirectory/dxserver/bin/dxserver status"
+sw1_pab_g0_por5 started
+sw1_edge_g12_por5 started
+sw1_cst_g0_por5 started
+sw1_mail_g12_por5 started
+sw1_mail_g13_por5 started
+sw1_edge_g13_por5 started
+-sh-4.1$
+
+
+
+-sh-4.1$ /opt/neto/bin/issue_cmd -h resddsa-po-02r.sys.comcast.net "su - dsa -c \"/opt/CA/eTrustDirectory/dxserver/bin/dxserver status\""
+
+
+
+
+-sh-4.1$ sudo su - dsa -c "/opt/CA/eTrustDirectory/dxserver/bin/dxserver status"|sed -n 6p|cut -f1 -d " "
+sw1_edge_g13_por5
+-sh-4.1$
+
+
+
+
+
+
+class res_dir::dir_server::rsyslog () {
+
+
+
+
+
+
+
+
+
+
+
+
+
+<% @dsa_array.each do |val| -%>
+[profile:updateLogGLM_<%= val %>]
+{ "name": "queryLogGLM_<%= val %>", "cmd": "/usr/local/bin/glm.pl", "cmd_args": "-s /var/tmp/glm-<%= val %>_update.state", }
+<% end -%>
+
+
+
+
+
+$dsas = split(dsa_array,",")
+define do_this {
+        $mule = "dsa_array_${name}"
+        $donkey = inline_template("<%= scope.lookupvar(mule) %>")
+
+[profile:updateLogGLM_ $donkey]
+{ "name": "queryLogGLM_ $donkey", "cmd": "/usr/local/bin/glm.pl", "cmd_args": "-s /var/tmp/glm- $donkey_update.state", }
+
+}
+
+
+do_this { $ifs:; }
+
+
+
+
+
+
+
+
+MURUGRAJ
+
+9994166815
+
+
+
+<% dsa_array.split(',').each do |int| -%>
+
+[profile:updateLogGLM_<%= int %>]
+{ "name": "queryLogGLM_ <%= int %>", "cmd": "/usr/local/bin/glm.pl", "cmd_args": "-s /var/tmp/glm- <%= int %>_update.state", }
+
+<% end -%>
+
+
+
+
+
+dsa_array.gsub("[", "").gsub("]","").gsub("\"","")

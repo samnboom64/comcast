@@ -1,0 +1,31 @@
+/opt/neto/bin/issue_cmd -l /home/skumar063c/poll res "/etc/init.d/icinga2 status"
+
+
+/opt/neto/bin/issue_cmd -l /home/skumar063c/poll res "icinga2 feature list"
+/opt/neto/bin/issue_cmd -l /home/skumar063c/poll res "telnet respoller-cmcd-04c 5665"
+
+/opt/neto/bin/issue_cmd -l /home/skumar063c/poll res "mysql -u root -pc0mcast! icinga -e "SELECT
+
+
+/opt/neto/bin/issue_cmd -l /home/skumar063c/poll res "tail -10 /var/log/icinga2/icinga2.log"
+/opt/neto/bin/issue_cmd -l /home/skumar063c/poll res "tail -10 /var/log/icinga2/startup.log"
+
+/opt/neto/bin/issue_cmd -l /home/skumar063c/poll res "df -h"
+/opt/neto/bin/issue_cmd -l /home/skumar063c/poll res "du -sch /var/lib/icinga2/api/log"
+/opt/neto/bin/issue_cmd -l /home/skumar063c/poll res "rm -rf  /var/lib/icinga2/api/log/1*"
+
+/opt/neto/bin/issue_cmd -l /home/skumar063c/poll res "/etc/init.d/icinga2 restart"
+
+/opt/neto/bin/issue_cmd -l /home/skumar063c/poll res "/etc/init.d/icinga2 stop"
+/opt/neto/bin/issue_cmd -l /home/skumar063c/poll res "uptime"
+/opt/neto/bin/issue_cmd -l /home/skumar063c/poll res "ps -ef|grep /usr/sbin/icinga2"
+
+/opt/neto/bin/issue_cmd -l /home/skumar063c/poll res "ls -ltrh /var/lib/icinga2/icinga2.state"
+
+/opt/neto/bin/issue_cmd -l /home/skumar063c/poll res "ls -ltrh /var/lib/icinga2/api/zones/global
+
+/opt/neto/bin/issue_cmd -l /home/skumar063c/poll res "du -sch /var/lib/icinga2/api/log"
+
+/opt/neto/bin/issue_cmd -l /home/skumar063c/poll res "uptime"
+/opt/neto/bin/issue_cmd -l /home/skumar063c/poll res "ls -ltrh /var/lib/icinga2/api/log|tail -2"
+

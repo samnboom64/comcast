@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+echo '<xml><access_token>16aff89b649135c9910e9e3585709923</access_token><alarm><name>Test Alarm - Team Thursday</name><originating_system>op5_nagios</originating_system>\
+<impact_level>high</impact_level></alarm><events><event><initiated_at>2013-10-24T17:01:24Z</initiated_at><subject>Test Service</subject><description>Blah Service</description>\
+<incident_status>CRITICAL</incident_status><impacted_host>host1</impacted_host><tag_list><tag>test</tag></tag_list></event></events></xml>'|xmllint --format -
+
+
+
+curl -s -k -X POST -H "Content-type: application/json" -d '{  "access_token": "ed9fcadad697f99954d77db51018a64f",  "format": "json",  "metric": {    "name": "Z Test Data",    "is_data_center_state": false  },  "metric_values": [    {      "value": "7913",      "created_at":"'$(date -u +"%Y-%m-%dT%H:%M:%SZ")'",          "custom_timestamp":"'$(date -u +"%Y-%m-%dT%H:%M:%SZ")'"                }  ]}' 'https://23.21.12.125/v1/metrics?access_token=ed9fcadad697f99954d77db51018a64f'
+
+
+
+curl -s -k -X POST -H "Content-type: application/json" -d '{  "access_token": "b5171cb5d26d233c03d2725e03a4e3de",  "format": "json",  "metric": {    "name": "Z Test Data",    "is_data_center_state": false  },  "metric_values": [    {      "value": "7913",      "created_at":"'$(date -u +"%Y-%m-%dT%H:%M:%SZ")'",          "custom_timestamp":"'$(date -u +"%Y-%m-%dT%H:%M:%SZ")'"                }  ]}' 'https://23.21.12.125/v1/alarms
+
+
+curl -s -k -X POST -H "Content-type: application/json" -d '<xml><access_token>16aff89b649135c9910e9e3585709923</access_token><alarm><name>Test Alarm - Team Thursday</name><originating_system>op5_nagios</originating_system><impact_level>high</impact_level></alarm><events><event><initiated_at>2013-10-24T17:01:24Z</initiated_at><subject>Test Service</subject><description>Blah Service</description><incident_status>CRITICAL</incident_status><impacted_host>host1</impacted_host><tag_list><tag>test</tag></tag_list></event></events></xml>' 'https://23.21.12.125/v1/metrics?access_token=ed9fcadad697f99954d77db51018a64f'
+
+
+
+Things Needed and Step:
+
+1)Need OIV access token ,Jim will provide
+2)Need demo OIV url access http://cpg-oiv-demo.cable.comcast.com/
+3)xml Format for CNOC dashboard ie xml to POST
+4)Create new icinga2 contacts,contacts group,command for POST the xml to OIV url
+
+
+
+curl -s -k -X POST -H "Content-type: application/json" -d '{ "access_token":"b5171cb5d26d233c03d2725e03a4e3de", "format":"json", "alarm":{"name":"Imap alarm","originating_system":"eventswitcher","impact_level":"high","alarm_type":"application","sop":"https://www.teamccp.com/confluence/display/xcal/SOP-for-reconnects"},"events": [{"subject":"CEMP Error Rate Exceeding Threshold", "application_name":"CEMP-test",  "service_desk":"CNOC_Residential_Email","description":"Please follow ","host_impacted":"dummy.sys.comcast.net","service_impacted":"CEMP Error Rate", "event_status":"CRITICAL","initiated_at":"2014-02-03T17:00:24Z"}]}' 'https://23.21.12.125/v1/alarms'  
+
+https://23.21.12.125/v1/metrics?access_token=b5171cb5d26d233c03d2725e03a4e3de
+curl -s -k 'https://23.21.12.125/v1/metrics/3674/metric_values.xml?access_token=b5171cb5d26d233c03d2725e03a4e3de'
+
+
+
+
+
+
+
+
+
+
+
+
+-sh-4.1$ curl -s -k -X POST -H "Content-type: application/json" -d '{ "access_token":"b5171cb5d26d233c03d2725e03a4e3de", "format":"json", "alarm":{"name":"CEMP Error Rate","originating_system":"eventswitcher","impact_level":"high","alarm_type":"application","sop":"https://www.teamccp.com/confluence/display/xcal/SOP-for-reconnects"},"events": [{"subject":"CEMP Error Rate Exceeding Threshold", "application_name":"CEMP-test", "itrc_application_id":3674, "service_desk":"NVAS","description":"Please follow this SOP to check the status of the alarm: http","host_impacted":"lebnpa-2wc01v.lebanon.pa.dtv.comcast.net","service_impacted":"CEMP Error Rate", "event_status":"CRITICAL","initiated_at":"2014-02-03T17:00:24Z"}]}' 'https://23.21.12.125/v1/alarms'
+{"message":"Alarm updated","alarm":{"id":9531,"impact_level":"high","name":"CEMP Error Rate","alarm_type":"application","originating_system":"Eventswitcher","component":null,"primary_owner":null,"secondary_owner":null,"confidence_factor":null,"impacted_business_process":null,"description":null,"sop":"https://www.teamccp.com/confluence/display/xcal/SOP-for-reconnects","is_active":true,"upper_threshold":null,"lower_threshold":null,"added_at":"2014-04-07T12:25:37.046Z","last_reviewed_at":null,"created_at":"2014-04-07T12:25:37.046Z","updated_at":"2015-07-29T14:27:33.966Z","event_handlers":[],"application_name":"CEMP-test","itrc_application_id":3674,"service_desk":"NVAS","latest_event_status":"OK","tenant_id":0,"ui_mapped_sop":"mapped changed sop","sop_override":"override sop"},"events":[{"id":2277229,"alarm_id":9531,"event_hash":"bc3ba9c0694bbbd8ed46e2d25f5df7af4d543b70","subject":"CEMP Error Rate Exceeding Threshold","description":"Please follow this SOP to check the status of the alarm: http","aggregated_count":1,"host_impacted":"lebnpa-2wc01v.lebanon.pa.dtv.comcast.net","service_impacted":"CEMP Error Rate","initiated_at":"2014-02-03T17:00:24.000Z","created_at":"2015-07-29T14:27:33.918Z","updated_at":"2015-07-29T14:27:33.918Z","incident_status":null,"application_name":"CEMP-test","acknowledgement_url_template":null,"acknowledged_by":null,"acknowledged_at":null,"itrc_application_id":3674,"service_desk":"NVAS","snoozed_by":null,"snoozed_at":null,"snoozed_for":null,"event_status":"CRITICAL","ticketed_by":null,"ticketed_at":null,"snoozed_comment":null,"received_by_oiv_at":"2015-07-29T14:27:33.919Z","acknowledged_by_user":null,"snoozed_by_user":null,"ticketed_by_user":null,"incident_ticket_id":null,"incident_ticket_sor":null,"additional_description":null,"first_event_initiated_at":"2014-02-03T17:00:24.000Z","sub_type":null,"host_ip_address":null,"incident_ticket_auto_correlated":false,"incident_ticket_auto_correlated_at":null,"host_groups":[],"jira_browse_issue_path":null,"brouha_browse_issue_path":null,"service_now_browse_issue_path":null}]}
+
+
+
+
+-sh-4.1$ curl -s -k -X POST -H "Content-type: application/json" -d '
+
+{ "access_token":"b5171cb5d26d233c03d2725e03a4e3de", 
+	"format":"json", 
+	"alarm":
+		{"name":"CEMP Error Rate",
+		"originating_system":"eventswitcher",
+		"impact_level":"high",
+		"alarm_type":"application",
+		"sop":"https://www.teamccp.com/confluence/display/xcal/SOP-for-reconnects"},
+		"events": 
+		[
+		{
+			"subject":"CEMP Error Rate Exceeding Threshold",
+			"application_name":"CEMP-test",
+			"itrc_application_id":3674,
+			"service_desk":"NVAS",
+			"description":"Please follow this SOP to check the status of the alarm: http",
+			"host_impacted":"lebnpa-2wc01v.lebanon.pa.dtv.comcast.net",
+			"service_impacted":"CEMP Error Rate",
+			"event_status":"CRITICAL",
+			"initiated_at":"2014-02-03T17:00:24Z"
+			}
+			]
+		} 
+		
+		
+		https://23.21.12.125/v1/alarms'
+
+		
+		
+		
+		Today's Standup Update
+		1)worked on troubleshooting RACON ch2d poller alerts due last night activity on CH2D cloud .
+		2)Icinga OIV Script:Tested some json POST request to OIV api and able to get alert on OIV dashboard.
+		3)Done planning on ICINGA Notifiaction script for OIV.
+		
+		
+		
+		
+		
+		
+		
+		
+		
+sudo vim /etc/icinga2/conf.d/commands.conf		
+		object NotificationCommand "icinga2-oiv-service-notification" {
+  import "plugin-notification-command"
+
+  command = [ SysconfDir + "/icinga2/scripts/icinga2_oiv_noti.sh" ]
+
+  env = {
+    NOTIFICATIONTYPE = "$notification.type$"
+     = "$service.name$"
+    HOSTALIAS = "$host.display_name$"
+    HOSTADDRESS = "$address$"
+    SERVICESTATE = "$service.state$"
+    LONGDATETIME = "$icinga.long_date_time$"
+    SERVICEOUTPUT = "$service.output$"
+    NOTIFICATIONAUTHORNAME = "$notification.author$"
+    NOTIFICATIONCOMMENT = "$notification.comment$"
+    HOSTDISPLAYNAME = "$host.display_name$"
+    SERVICEDISPLAYNAME = "$service.display_name$"
+    USEREMAIL = "$user.email$"
+  }
+}
+
+sudo vim /etc/icinga2/conf.d/templates.conf
+template Notification "icinga2-oiv-service-notification" {
+  command = "icinga2-oiv-service-notification"
+
+  states = [ OK, Warning, Critical, Unknown ]
+  types = [ Problem, Acknowledgement, Recovery, Custom,
+            FlappingStart, FlappingEnd,
+            DowntimeStart, DowntimeEnd, DowntimeRemoved ]
+
+  period = "24x7"
+}
+
+
+sudo vim /etc/icinga2/conf.d/notifications.conf
+apply Notification "icinga2-oiv-icingaadmin" to Service {
+  import "icinga2-oiv-service-notification"
+
+  user_groups = host.vars.notification.icinga.groups
+
+  assign where host.vars.notification.icinga
+}
+
+
+
+
+
+
+ sudo vim /etc/icinga2/zones.d/global-templates/commands.conf
+  sudo vim /etc/icinga2/zone.d/global-templates/notifications.conf
+
+    sudo vim /etc/icinga2/zones.d/global-templates/templates.conf
+    sudo vim /etc/icinga2/zones.d/global-templates/notifications.conf
+
+    sudo vim /etc/icinga2/zones.d/res-east-ch2d/res_hosts.east.conf
+    sudo vim /etc/icinga2/zones.d/res-east-ch2d/res_hosts.east.conf

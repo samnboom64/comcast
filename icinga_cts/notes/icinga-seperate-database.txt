@@ -1,0 +1,450 @@
+
+
+DB HOST
+-------------
+respollerdb-ch2-01v.email.comcast.net
+respollerdb-po-01v.email.comcast.net
+
+
+step1:
+===================
+Take mysql dump from existing databases "restool-ch2d-04c.sys.comcast.net"
+
+mysqldump -u root -p icinga_web > icinga_web.sql
+
+mysqldump -u root -p icinga > icinga.sql
+mysqldump -u root -p icinga_web2 > icinga_web2.sql
+
+Step2:
+------------------------------
+Afetr mysql install in new DB server
+
+-sh-4.1$sudo yum install mysql-server
+
+Create new database
+============================
+
+-sh-4.1$ sudo mysql -u root -p
+mysql> create database icinga;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> create database icinga_web;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> create database icinga_web2;
+Query OK, 1 row affected (0.00 sec)
+
+GRANT REMOTE ACCESS
+==================================
+
+mysql>GRANT SELECT, INSERT, UPDATE, DELETE, DROP, CREATE VIEW, INDEX, EXECUTE ON icinga_web.* TO 'icinga_web'@'restool-ch2d-04c.sys.comcast.net' IDENTIFIED BY 'icinga_web'; 
+mysql>GRANT SELECT, INSERT, UPDATE, DELETE, DROP, CREATE VIEW, INDEX, EXECUTE ON icinga.* TO 'icinga'@'restool-ch2d-04c.sys.comcast.net' IDENTIFIED BY 'icinga'; 
+mysql>GRANT SELECT, INSERT, UPDATE, DELETE, DROP, CREATE VIEW, INDEX, EXECUTE ON icinga_web2.* TO 'icinga_web2'@'restool-ch2d-04c.sys.comcast.net' IDENTIFIED BY 'icinga_web2'; 
+
+
+Step3:
+---------------------------------
+Transfer dump to new databases server :
+
+1)respollerdb-ch2-01v.email.comcast.net
+2)respollerdb-po-01v.email.comcast.net
+
+-sh-4.1$  scp  restool-ch2d-04c.sys.comcast.net:/home/skumar063c/mysql-dump/icinga.sql /home/skumar063c/File_ssh/
+icinga.sql                                                                                                         100%  132MB  44.1MB/s   00:03
+-sh-4.1$  scp  restool-ch2d-04c.sys.comcast.net:/home/skumar063c/mysql-dump/icinga_web.sql /home/skumar063c/File_ssh/
+icinga_web.sql                                                                                                     100%  653KB 653.2KB/s   00:00
+-sh-4.1$  scp  restool-ch2d-04c.sys.comcast.net:/home/skumar063c/mysql-dump/icinga_web2.sql /home/skumar063c/File_ssh/
+icinga_web2.sql                                                                                                    100% 5104     5.0KB/s   00:00
+-sh-4.1$ cd /home/skumar063c/File_ssh/
+-sh-4.1$ scp icinga.sql respollerdb-ch2-01v.email.comcast.net:/tmp
+icinga.sql                                                                                                         100%  132MB  44.1MB/s   00:03
+-sh-4.1$ scp icinga_web.sql respollerdb-ch2-01v.email.comcast.net:/tmp
+icinga_web.sql                                                                                                     100%  653KB 653.2KB/s   00:00
+-sh-4.1$ scp icinga_web2.sql respollerdb-ch2-01v.email.comcast.net:/tmp
+icinga_web2.sql  
+
+
+
+Step4:
+
+
+RESTORE DB from mysqlDump :
+========================================================
+
+-sh-4.1$ sudo mysql -u root -p icinga </tmp/icinga
+icinga.sql       icinga_web2.sql  icinga_web.sql
+-sh-4.1$ sudo mysql -u root -p icinga </tmp/icinga.sql
+Enter password:
+-sh-4.1$ sudo mysql -u root -p icinga_web </tmp/icinga_web.sql
+Enter password:
+-sh-4.1$ sudo mysql -u root -p icinga_web2 </tmp/icinga_web2.sql
+Enter password:
+
+
+
+mysql> select (UNIX_TIMESTAMP(NOW())-UNIX_TIMESTAMP(ss.status_update_time)) as diff, NOW() as now, ss.status_update_time as status_update_time, os.name1 as host, os.name2 as service from icinga_servicestatus ss join icinga_objects os on os.object_id=ss.service_object_id order by status_update_time desc limit 20;
+
++------+---------------------+---------------------+---------------------+---------+
+| diff | now                 | status_update_time  | host                | service |
++------+---------------------+---------------------+---------------------+---------+
+|    2 | 2015-08-12 12:12:21 | 2015-08-12 12:12:19 | icinga2             | ping4   |
+|    2 | 2015-08-12 12:12:21 | 2015-08-12 12:12:19 | icinga2             | ssh     |
+|    3 | 2015-08-12 12:12:21 | 2015-08-12 12:12:18 | icinga2-s1          | ssh     |
+|    7 | 2015-08-12 12:12:21 | 2015-08-12 12:12:14 | icinga2-s2.samn.com | ssh     |
+|    7 | 2015-08-12 12:12:21 | 2015-08-12 12:12:14 | webkit.samn.com     | ssh     |
+|    8 | 2015-08-12 12:12:21 | 2015-08-12 12:12:13 | icinga2-s1          | http    |
+|   10 | 2015-08-12 12:12:21 | 2015-08-12 12:12:11 | webkit.samn.com     | procs   |
+|   17 | 2015-08-12 12:12:21 | 2015-08-12 12:12:04 | webkit.samn.com     | ping4   |
+|   17 | 2015-08-12 12:12:21 | 2015-08-12 12:12:04 | icinga2-s1          | disk    |
+|   18 | 2015-08-12 12:12:21 | 2015-08-12 12:12:03 | icinga2-s2.samn.com | procs   |
+|   22 | 2015-08-12 12:12:21 | 2015-08-12 12:11:59 | icinga2-s2.samn.com | ping4   |
+|   24 | 2015-08-12 12:12:21 | 2015-08-12 12:11:57 | icinga2             | disk /  |
+|   24 | 2015-08-12 12:12:21 | 2015-08-12 12:11:57 | icinga2-s1          | ping6   |
+|   24 | 2015-08-12 12:12:21 | 2015-08-12 12:11:57 | icinga2-s1          | disk /  |
+|   24 | 2015-08-12 12:12:21 | 2015-08-12 12:11:57 | icinga2             | ping6   |
+|   26 | 2015-08-12 12:12:21 | 2015-08-12 12:11:55 | icinga2-s2.samn.com | icinga  |
+|   28 | 2015-08-12 12:12:21 | 2015-08-12 12:11:53 | webkit.samn.com     | load    |
+|   32 | 2015-08-12 12:12:21 | 2015-08-12 12:11:49 | icinga2-s2.samn.com | load    |
+|   35 | 2015-08-12 12:12:21 | 2015-08-12 12:11:46 | icinga2             | http    |
+|   36 | 2015-08-12 12:12:21 | 2015-08-12 12:11:45 | icinga2-s1          | ping4   |
++------+---------------------+---------------------+---------------------+---------+
+20 rows in set (0.00 sec)
+
+
+mysql> SELECT status_update_time from icinga_programstatus where (UNIX_TIMESTAMP(status_update_time) > UNIX_TIMESTAMP(NOW())-60);
++---------------------+
+| status_update_time  |
++---------------------+
+| 2015-08-12 12:14:34 |
++---------------------+
+1 row in set (0.00 sec)
+
+
+
+[root@icinga2 ~]# cd /etc/icinga2/features-enabled/
+[root@icinga2 features-enabled]# cat ido-mysql.conf 
+/**
+ * The db_ido_mysql library implements IDO functionality
+ * for MySQL.
+ */
+
+library "db_ido_mysql"
+
+object IdoMysqlConnection "ido-mysql" {
+  user = "icinga"
+  password = "icinga"
+  host = "icinga2-s2"
+  database = "icinga"
+}
+[root@icinga2 features-enabled]# 
+
+
+
+
+
+
+
+===================================
+
+[root@icinga2 features-enabled]# find / -name databases.xml
+/usr/share/icinga-web/app/config/databases.xml
+/usr/share/icinga-web/app/modules/TestDummy/config/databases.xml
+/etc/icinga-web/conf.d/databases.xml
+[root@icinga2 features-enabled]# cat /usr/share/icinga-web/app/config/databases.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/databases/1.0">
+    <!-- Some resources for:
+        http://docs.icinga.org/latest/de/icinga-web-config.html#configweb-databases
+        https://wiki.icinga.org/display/howtos/databases.xml -->
+    
+    <ae:configuration>
+        <databases default="icinga_web">
+            <database name="icinga_web" class="AppKitDoctrineDatabase">
+
+                <!--
+                    Doctrine dsn strings:
+                    
+                    http://www.doctrine-project.org/documentation/manual/1_1/en/introduction-to-connections
+                    
+                    * Postgre: pgsql://icinga_web:icinga_web@localhost:5432/icinga_web
+                     *MySQL: mysql://icinga_web:icinga_web@127.0.0.1:3306/icinga_web
+                    * Oracle: oracle://icinga_web:icinga_web@localhost/iweb (iweb is the DSN name on localhost)
+                    * Oracle TSNAMES (e.g. /opt/oracle/instantclient_11_2/network/admin/tnsnames.ora):
+                            iweb =
+                                    (DESCRIPTION =
+                                    (ADDRESS = (PROTOCOL = TCP)(HOST = 10.121.0.85)(PORT = 1521))
+                                    (CONNECT_DATA =
+                                    (SERVER = DEDICATED)
+                                    (SERVICE_NAME = XE)
+                                    )
+                             )
+                    * SQLite: sqlite:///%core.root_dir%/app/data/icinga-web.db
+                      Development only
+ 
+                    
+                    Please note that some drivers can not be configured through attributes.
+                    Just to be safe add attributes to the dsn, e.g.
+                        oracle://icinga_web:icinga_web@localhost/iweb;persistent=true
+                    
+                    (https://dev.icinga.org/issues/2200)
+                    
+                -->
+                <ae:parameter name="dsn">mysql://icinga_web:icinga_web@192.168.179.142:3306/icinga_web</ae:parameter>
+                
+                <!-- Generic credentials  -->
+                <!-- <ae:parameter name="username">icinga_web</ae:parameter> -->
+                <!-- <ae:parameter name="password">icinga_web</ae:parameter> -->
+                
+                <!-- DB encoding type -->
+                <ae:parameter name="charset">utf8</ae:parameter>
+                
+                <!--
+                    Doctrine_Manager configuration
+                -->
+                <ae:parameter name="manager_attributes">
+                    <!-- This allows lazy loading of the models -->
+                    <ae:parameter name="Doctrine_Core::ATTR_MODEL_LOADING">CONSERVATIVE</ae:parameter>
+                </ae:parameter>
+                
+                <!-- The path to our models -->
+                <ae:parameter name="load_models">%core.module_dir%/AppKit/lib/database/models/generated</ae:parameter>
+                <ae:parameter name="models_directory">%core.module_dir%/AppKit/lib/database/models</ae:parameter>               
+                <!-- Oracle specific -->
+                <ae:parameter name="date_format"><![CDATA[YYYY-MM-DD HH24:MI:SS]]></ae:parameter>
+            
+                <!-- Define caching rules for this connection -->
+                <ae:parameter name="caching">
+                    <!-- enable caching -->
+                    <ae:parameter name="enabled">false</ae:parameter>
+                    <!-- curerntly supported: memcache and APC -->
+                    <ae:parameter name="driver">apc</ae:parameter>
+                    <!--
+                        Memcache specific
+                    <ae:parameter name="memcache_server">localhost</ae:parameter>
+                    <ae:parameter name="memcache_port">11211</ae:parameter>
+                    -->
+                
+                    <!-- there aren't many reasons for not using query-caches -->
+                    <ae:parameter name="use_query_cache">true</ae:parameter>
+                    <!-- result cache: If in doubt, let it out! This caches results from the database -->
+                    <ae:parameter name="use_result_cache">true</ae:parameter>
+                    <ae:parameter name="result_cache_lifespan">60</ae:parameter>
+                </ae:parameter>     
+            </database>
+
+            <!-- 
+                This part configures the icinga database (destination to ido2db)
+                
+                If you're using oracle in this case the driver 'icingaOracle' is needed.
+                
+                - oracle: icingaOracle://icinga:icinga@localhost/iweb
+            -->
+            <database xmlns="http://agavi.org/agavi/config/parts/databases/1.0" name="icinga" class="IcingaDoctrineDatabase">
+                <ae:parameter name="dsn">mysql://icinga:icinga@192.168.179.142:3306/icinga</ae:parameter>
+                <!-- Must be removed for oracle databases -->
+                <ae:parameter name="prefix">icinga_</ae:parameter>
+                <ae:parameter name="charset">utf8</ae:parameter>
+                <ae:parameter name="date_format"><![CDATA[YYYY-MM-DD HH24:MI:SS]]></ae:parameter>
+                <ae:parameter name="manager_attributes">
+                    <ae:parameter name="Doctrine_Core::ATTR_MODEL_LOADING">CONSERVATIVE</ae:parameter>
+                </ae:parameter>
+                <ae:parameter name="use_retained">true</ae:parameter>
+
+                <ae:parameter name="load_models">%core.module_dir%/Api/lib/database/models/generated</ae:parameter>
+                <ae:parameter name="models_directory">%core.module_dir%/Api/lib/database/models</ae:parameter>              
+                <ae:parameter name="caching">
+                    <!-- enable caching -->
+                    <ae:parameter name="enabled">false</ae:parameter>
+                    <!-- curerntly supported: memcache and APC -->
+                    <ae:parameter name="driver">apc</ae:parameter>
+                    <ae:parameter name="use_query_cache">true</ae:parameter>
+                </ae:parameter>
+
+            </database>
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="/etc/icinga-web/conf.d/databases.xml#xpointer(databases/node())">
+                <xi:fallback></xi:fallback>
+            </xi:include>
+        </databases>
+    </ae:configuration>
+</ae:configurations>
+[root@icinga2 features-enabled]# 
+
+
+
+
+
+
+
+
+[root@icinga2 features-enabled]# find / -name databases.xml
+/usr/share/icinga-web/app/config/databases.xml
+/usr/share/icinga-web/app/modules/TestDummy/config/databases.xml
+/etc/icinga-web/conf.d/databases.xml
+[root@icinga2 features-enabled]# cat /usr/share/icinga-web/app/config/databases.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0" xmlns="http://agavi.org/agavi/config/parts/databases/1.0">
+    <!-- Some resources for:
+        http://docs.icinga.org/latest/de/icinga-web-config.html#configweb-databases
+        https://wiki.icinga.org/display/howtos/databases.xml -->
+    
+    <ae:configuration>
+        <databases default="icinga_web">
+            <database name="icinga_web" class="AppKitDoctrineDatabase">
+
+                <!--
+                    Doctrine dsn strings:
+                    
+                    http://www.doctrine-project.org/documentation/manual/1_1/en/introduction-to-connections
+                    
+                    * Postgre: pgsql://icinga_web:icinga_web@localhost:5432/icinga_web
+                     *MySQL: mysql://icinga_web:icinga_web@127.0.0.1:3306/icinga_web
+                    * Oracle: oracle://icinga_web:icinga_web@localhost/iweb (iweb is the DSN name on localhost)
+                    * Oracle TSNAMES (e.g. /opt/oracle/instantclient_11_2/network/admin/tnsnames.ora):
+                            iweb =
+                                    (DESCRIPTION =
+                                    (ADDRESS = (PROTOCOL = TCP)(HOST = 10.121.0.85)(PORT = 1521))
+                                    (CONNECT_DATA =
+                                    (SERVER = DEDICATED)
+                                    (SERVICE_NAME = XE)
+                                    )
+                             )
+                    * SQLite: sqlite:///%core.root_dir%/app/data/icinga-web.db
+                      Development only
+ 
+                    
+                    Please note that some drivers can not be configured through attributes.
+                    Just to be safe add attributes to the dsn, e.g.
+                        oracle://icinga_web:icinga_web@localhost/iweb;persistent=true
+                    
+                    (https://dev.icinga.org/issues/2200)
+                    
+                -->
+                <ae:parameter name="dsn">mysql://icinga_web:icinga_web@192.168.179.142:3306/icinga_web</ae:parameter>
+                
+                <!-- Generic credentials  -->
+                <!-- <ae:parameter name="username">icinga_web</ae:parameter> -->
+                <!-- <ae:parameter name="password">icinga_web</ae:parameter> -->
+                
+                <!-- DB encoding type -->
+                <ae:parameter name="charset">utf8</ae:parameter>
+                
+                <!--
+                    Doctrine_Manager configuration
+                -->
+                <ae:parameter name="manager_attributes">
+                    <!-- This allows lazy loading of the models -->
+                    <ae:parameter name="Doctrine_Core::ATTR_MODEL_LOADING">CONSERVATIVE</ae:parameter>
+                </ae:parameter>
+                
+                <!-- The path to our models -->
+                <ae:parameter name="load_models">%core.module_dir%/AppKit/lib/database/models/generated</ae:parameter>
+                <ae:parameter name="models_directory">%core.module_dir%/AppKit/lib/database/models</ae:parameter>               
+                <!-- Oracle specific -->
+                <ae:parameter name="date_format"><![CDATA[YYYY-MM-DD HH24:MI:SS]]></ae:parameter>
+            
+                <!-- Define caching rules for this connection -->
+                <ae:parameter name="caching">
+                    <!-- enable caching -->
+                    <ae:parameter name="enabled">false</ae:parameter>
+                    <!-- curerntly supported: memcache and APC -->
+                    <ae:parameter name="driver">apc</ae:parameter>
+                    <!--
+                        Memcache specific
+                    <ae:parameter name="memcache_server">localhost</ae:parameter>
+                    <ae:parameter name="memcache_port">11211</ae:parameter>
+                    -->
+                
+                    <!-- there aren't many reasons for not using query-caches -->
+                    <ae:parameter name="use_query_cache">true</ae:parameter>
+                    <!-- result cache: If in doubt, let it out! This caches results from the database -->
+                    <ae:parameter name="use_result_cache">true</ae:parameter>
+                    <ae:parameter name="result_cache_lifespan">60</ae:parameter>
+                </ae:parameter>     
+            </database>
+
+            <!-- 
+                This part configures the icinga database (destination to ido2db)
+                
+                If you're using oracle in this case the driver 'icingaOracle' is needed.
+                
+                - oracle: icingaOracle://icinga:icinga@localhost/iweb
+            -->
+            <database xmlns="http://agavi.org/agavi/config/parts/databases/1.0" name="icinga" class="IcingaDoctrineDatabase">
+                <ae:parameter name="dsn">mysql://icinga:icinga@192.168.179.142:3306/icinga</ae:parameter>
+                <!-- Must be removed for oracle databases -->
+                <ae:parameter name="prefix">icinga_</ae:parameter>
+                <ae:parameter name="charset">utf8</ae:parameter>
+                <ae:parameter name="date_format"><![CDATA[YYYY-MM-DD HH24:MI:SS]]></ae:parameter>
+                <ae:parameter name="manager_attributes">
+                    <ae:parameter name="Doctrine_Core::ATTR_MODEL_LOADING">CONSERVATIVE</ae:parameter>
+                </ae:parameter>
+                <ae:parameter name="use_retained">true</ae:parameter>
+
+                <ae:parameter name="load_models">%core.module_dir%/Api/lib/database/models/generated</ae:parameter>
+                <ae:parameter name="models_directory">%core.module_dir%/Api/lib/database/models</ae:parameter>              
+                <ae:parameter name="caching">
+                    <!-- enable caching -->
+                    <ae:parameter name="enabled">false</ae:parameter>
+                    <!-- curerntly supported: memcache and APC -->
+                    <ae:parameter name="driver">apc</ae:parameter>
+                    <ae:parameter name="use_query_cache">true</ae:parameter>
+                </ae:parameter>
+
+            </database>
+            <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="/etc/icinga-web/conf.d/databases.xml#xpointer(databases/node())">
+                <xi:fallback></xi:fallback>
+            </xi:include>
+        </databases>
+    </ae:configuration>
+</ae:configurations>
+[root@icinga2 features-enabled]# 
+
+
+
+
+
+
+
+
+
+
+[root@restool-ch2d-04c config]# pwd
+/var/cache/icinga-web/config
+/usr/share/icinga-web/bin/clearcache.sh
+
+/var/lib/icinga2/api
+
+ UPDATE icinga_customvariablestatus SET has_been_modified = '0',  instance_id = 1,  is_json = '0',  object_id = 1082,  status_update_time = FROM_UNIXTIME(1439439941),  varname = 'os',  varvalue = 'linux' WHERE object_id = 1082 AND varname = 'os'
+
+
+ 
+ 
+ openssl s_client -CAfile /etc/icinga2/pki/ca.crt -cert /etc/icinga2/pki/restool-cmcd-04c.crt -key /etc/icinga2/pki/restool-cmcd-04c.key -connect restool-ch2d-04c.crt:5665
+
+
+ 
+ arrange with hostgroup and service group
+ ===================================================
+ 
+ http://restool-cmcd-04c.sys.comcast.net/icinga-web2/monitoring/list/hosts?hostgroup_name=xvm
+ http://restool-ch2d-04c.sys.comcast.net/icinga-web2/monitoring/list/services?servicegroup=xvm
+ 
+ 
+ 
+ 
+ 
+ Icinga2 PKI new-cert --cn $ checker host --key /tmp/$checkerHost.key --csr /tmp/$checkerHost.csr 
+Icinga2 PKI sign-csr --csr /tmp/$checkerHost.csr --cert /tmp/$checkerHost.crt
+ 
+ 
+ 
+ openssl s_client -CAfile /etc/icinga2/pki/ca.crt -cert /etc/icinga2/pki/respoller-ch2d-01c.crt -key /etc/icinga2/pki/respoller-ch2d-01c.key -connect respoller-cmcd-01c.crt:5665
+ 
+ 
+ 
+ 	MySQL command to check whether icinga writing to DB
+	
+	
+	
+	<syntaxhighlight lang="mysql">
+	</syntaxhighlight>

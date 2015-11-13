@@ -1,0 +1,193 @@
+ icinga.icinga_notifications  
+| icinga.icinga_contactnotifications    | 0.37M | 0.03G | 0.03G | 0.05G      |    0.98 |
+| icinga.icinga_servicestatus           | 0.04M | 0.02G | 0.03G | 0.05G      |    1.31 |
+| icinga.icinga_objects                 | 0.04M | 0.00G | 0.02G | 0.02G      |    4.13 |
+| icinga.icinga_customvariablestatus    | 0.08M | 0.01G | 0.01G | 0.02G      |    1.64 |
+| icinga.icinga_customvariables         | 0.08M | 0.01G | 0.01G | 0.02G      |    2.08 |
+| icinga.icinga_services                | 0.04M | 0.01G | 0.01G | 0.02G      |    0.90 |
+| icinga.icinga_hoststatus              | 0.00M | 0.00G | 0.00G | 0.00G      |    0.80 |
+
+
+TRUNCATE TABLE icinga.icinga_notifications;
+TRUNCATE TABLE icinga_contactnotifications;
+TRUNCATE TABLE icinga_servicestatus;
+TRUNCATE TABLE icinga_customvariablestatus;
+TRUNCATE TABLE icinga_hoststatus;
+TRUNCATE TABLE icinga_statehistory;
+TRUNCATE TABLE icinga_logentries;
+TRUNCATE TABLE icinga_flappinghistory;
+TRUNCATE TABLE icinga_acknowledgements;
+TRUNCATE TABLE icinga_commenthistory;
+TRUNCATE TABLE icinga_contactnotificationmethods;
+TRUNCATE TABLE icinga_downtimehistory;
+TRUNCATE TABLE icinga_eventhandlers;
+TRUNCATE TABLE icinga_hostchecks;
+TRUNCATE TABLE icinga_processevents;
+TRUNCATE TABLE icinga_servicechecks;
+TRUNCATE TABLE icinga_systemcommands;
+
+acknowledgements_age	Optional. Max age for acknowledgements table rows (entry_time). Defaults to 0 (never).
+commenthistory_age	Optional. Max age for commenthistory table rows (entry_time). Defaults to 0 (never).
+contactnotifications_age	Optional. Max age for contactnotifications table rows (start_time). Defaults to 0 (never).
+contactnotificationmethods_age	Optional. Max age for contactnotificationmethods table rows (start_time). Defaults to 0 (never).
+downtimehistory_age	Optional. Max age for downtimehistory table rows (entry_time). Defaults to 0 (never).
+eventhandlers_age	Optional. Max age for eventhandlers table rows (start_time). Defaults to 0 (never).
+externalcommands_age	Optional. Max age for externalcommands table rows (entry_time). Defaults to 0 (never).
+flappinghistory_age	Optional. Max age for flappinghistory table rows (event_time). Defaults to 0 (never).
+hostchecks_age	Optional. Max age for hostalives table rows (start_time). Defaults to 0 (never).
+logentries_age	Optional. Max age for logentries table rows (logentry_time). Defaults to 0 (never).
+notifications_age	Optional. Max age for notifications table rows (start_time). Defaults to 0 (never).
+processevents_age	Optional. Max age for processevents table rows (event_time). Defaults to 0 (never).
+statehistory_age	Optional. Max age for statehistory table rows (state_time). Defaults to 0 (never).
+servicechecks_age	Optional. Max age for servicechecks table rows (start_time). Defaults to 0 (never).
+systemcommands_age	Optional. Max age for systemcommands table rows (start_time). Defaults to 0 (never).
+
+
+acknowledgements_age = 1d
+commenthistory_age = 1d
+contactnotifications_age = 1d
+contactnotificationmethods_age = 1d
+downtimehistory_age = 1d
+eventhandlers_age = 1d
+externalcommands_age = 1d
+flappinghistory_age = 1d
+hostchecks_age = 1d
+logentries_age = 1d
+notifications_age = 1d
+processevents_age = 1d
+statehistory_age = 1d
+servicechecks_age = 1d
+systemcommands_age = 1d
+
+
+TRUNCATE TABLE icinga.icinga_notifications;
+TRUNCATE TABLE icinga_contactnotifications;
+TRUNCATE TABLE icinga_servicestatus;
+TRUNCATE TABLE icinga_customvariablestatus;
+TRUNCATE TABLE icinga_hoststatus;
+TRUNCATE TABLE icinga_statehistory;
+TRUNCATE TABLE icinga_logentries;
+
+
+
+select check_command,last_check,output from icinga_servicestatus ORDER BY last_check limit 10;
+
+select * from icinga_contactnotifications ORDER BY end_time limit 10;
+
+
+
+ select count(*) from icinga_logentries ORDER BY entry_time;
+ 
+mysql> select count(*) from icinga_contactnotifications ORDER BY end_time;
++----------+
+| count(*) |
++----------+
+|     4786 |
++----------+
+1 row in set (0.01 sec)
+
+
+
+
+| icinga_acknowledgements               
+acknowledgements_age = 1d  |                   #it should be not in retension
+
+
+| icinga_commands                        |
+| icinga_commenthistory    
+commenthistory_age = 1d						#it should be not in retension
+
+              |
+| icinga_comments                        |
+| icinga_configfiles                     |
+| icinga_configfilevariables             |
+| icinga_conninfo                        |
+| icinga_contact_addresses               |
+| icinga_contact_notificationcommands    |
+| icinga_contactgroup_members            |
+| icinga_contactgroups                   |
+| icinga_contactnotificationmethods      |
+
+
+| icinga_contactnotifications    
+contactnotifications_age = 1d
+
+        |
+| icinga_contacts                        |
+| icinga_contactstatus                   |
+| icinga_customvariables                 |
+| icinga_customvariablestatus            |
+| icinga_dbversion                       |
+| icinga_downtimehistory   				#it should be not in retension
+downtimehistory_age = 1d
+              |
+| icinga_endpoints                       |
+| icinga_endpointstatus                  |
+| icinga_eventhandlers     
+eventhandlers_age = 1d
+              |
+| icinga_externalcommands      
+
+externalcommands_age = 1d
+
+          |
+| icinga_flappinghistory    
+
+flappinghistory_age = 1d
+
+             |
+| icinga_host_contactgroups              |
+| icinga_host_contacts                   |
+| icinga_host_parenthosts                |
+| icinga_hostchecks         
+hostchecks_age = 1d
+             |
+| icinga_hostdependencies                |
+| icinga_hostescalation_contactgroups    |
+| icinga_hostescalation_contacts         |
+| icinga_hostescalations                 |
+| icinga_hostgroup_members               |
+| icinga_hostgroups                      |
+| icinga_hosts                           |
+| icinga_hoststatus                      |
+| icinga_instances                       |
+| icinga_logentries        
+logentries_age = 1d
+              |
+| icinga_notifications      
+notifications_age = 1d
+             |
+| icinga_objects                         |
+| icinga_processevents          
+processevents_age = 1d
+         |
+| icinga_programstatus                   |
+| icinga_runtimevariables                |
+| icinga_scheduleddowntime               |
+| icinga_service_contactgroups           |
+| icinga_service_contacts                |
+| icinga_servicechecks  
+servicechecks_age = 1d
+                 |
+| icinga_servicedependencies             |
+| icinga_serviceescalation_contactgroups |
+| icinga_serviceescalation_contacts      |
+| icinga_serviceescalations              |
+| icinga_servicegroup_members            |
+| icinga_servicegroups                   |
+| icinga_services                        |
+| icinga_servicestatus                   |
+| icinga_statehistory   
+statehistory_age = 1d
+
+                 |
+| icinga_systemcommands   
+
+systemcommands_age = 1d
+
+               |
+| icinga_timeperiod_timeranges           |
+| icinga_timeperiods                     |
++--------------------------------------
+
+

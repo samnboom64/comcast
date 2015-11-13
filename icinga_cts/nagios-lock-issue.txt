@@ -1,0 +1,118 @@
+-sh-4.1$  mysql -h pastoolsdb-wc-01.sys.comcast.net -u merlin  -pmerlin merlin_residential_email
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 12025114
+Server version: 5.1.58-community-log MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2013, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> select @@hostname, database(), now(), IS_USED_LOCK("racon-deploy-config:merlin_hsi");
++----------------------------------+--------------------------+---------------------+------------------------------------------------+
+| @@hostname                       | database()               | now()               | IS_USED_LOCK("racon-deploy-config:merlin_hsi") |
++----------------------------------+--------------------------+---------------------+------------------------------------------------+
+| pastoolsdb-wc-01.sys.comcast.net | merlin_residential_email | 2015-05-28 08:58:40 |                                           NULL |
++----------------------------------+--------------------------+---------------------+------------------------------------------------+
+1 row in set (0.03 sec)
+
+mysql> quit
+Bye
+-sh-4.1$ date
+Thu May 28 08:59:26 UTC 2015
+-sh-4.1$
+
+
+
+UPDATE service SET notifications_enabled='0' WHERE host_name = 'comimta-po.sys.comcast.net' AND service_description = 'Memory Usage';
+
+mysql> select * from service WHERE host_name='comimta-po.sys.comcast.net' AND service_description='Memory Usage'\G;
+
+UPDATE service SET notifications_enabled='1' WHERE host_name = 'resxcp-fxbo-05c.sys.comcast.net';
+
+
+select scheduled_downtime_depth from host WHERE host_name="resxcp-ch2d-08c.sys.comcast.net" \G;
+UPDATE service SET scheduled_downtime_depth='1' WHERE host_name = 'resxcp-ch2d-08c.sys.comcast.net';
+
+mysql> UPDATE service SET notifications_enabled='1' WHERE host_name = 'resxcp-fxbo-05c.sys.comcast.net';
+Query OK, 19 rows affected (0.03 sec)
+Rows matched: 19  Changed: 19  Warnings: 0
+
+mysql> select service_description,notifications_enabled from service WHERE host_name='restool-cmcd-04c.sys.comcast.net';
++--------------------------------+-----------------------+
+| service_description            | notifications_enabled |
++--------------------------------+-----------------------+
+| A basic SNMP check             |                     1 |
+| CPU Utilization                |                     1 |
+| FILEAGE:xcpreauth.log          |                     1 |
+| Load Average                   |                     1 |
+| Net-SNMP - critical processes  |                     1 |
+| Net-SNMP - Disk IOPS           |                     1 |
+| Net-SNMP partition utilization |                     1 |
+| RAM Utilization                |                     1 |
+| Swap Utilization               |                     1 |
+| XCP:HTTPD_proc                 |                     1 |
+| XCP:LOGIN_access               |                     1 |
+| XCP:LOG_apache_errors          |                     1 |
+| XCP:metrics                    |                     1 |
+| XCP:TCP_port_80                |                     1 |
+| XCP:TOMCAT_port_8005           |                     1 |
+| XCP:TOMCAT_port_8009           |                     1 |
+| XCP:TOMCAT_port_8080           |                     1 |
+| XCP:TOMCAT_proc                |                     1 |
+| XCP:WEBMAIL_access             |                     1 |
++--------------------------------+-----------------------+
+19 rows in set (0.03 sec)
+
+mysql>
+
+
+
+
+
+
+
+
+[root@respoller-cmcd-03c racon_script]# mysql -h pastoolsdb-wc-01.sys.comcast.net -u merlin  -pmerlin merlin_residential_email -e "select service_description,notifications_enabled,host_name from service where service_description='ESX:Check' AND host_name like 'resesx-ch2-%' group by host_name;"
+
+
+
+down time set manually:
+=============================
+mysql> select scheduled_downtime_depth from host WHERE host_name="resxcp-ch2d-08c.sys.comcast.net";
++--------------------------+
+| scheduled_downtime_depth |
++--------------------------+
+|                        0 |
++--------------------------+
+1 row in set (0.04 sec)
+
+mysql> UPDATE host SET scheduled_downtime_depth='1' WHERE host_name = 'resxcp-ch2d-08c.sys.comcast.net';
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select scheduled_downtime_depth from host WHERE host_name="resxcp-ch2d-07c.sys.comcast.net";
++--------------------------+
+| scheduled_downtime_depth |
++--------------------------+
+|                        1 |
++--------------------------+
+1 row in set (0.04 sec)
+
+mysql>
+
+
+UPDATE host SET scheduled_downtime_depth='1' WHERE host_name = 'resxcp-ch2d-07c.sys.comcast.net';
+
+
+
+ select host_name,downtime_type,service_description,FROM_UNIXTIME('start_time'),FROM_UNIXTIME('end_time'),FROM_UNIXTIME('duration') from scheduled_downtime where host_name="resiscd-ch2-059p.sys.comcast.net";
+ 
+ 
+  select host_name,downtime_type,service_description,DATE_FORMAT(FROM_UNIXTIME(`start_time`), "%T %m/%d&Y"),DATE_FORMAT(FROM_UNIXTIME(`end_time`), "%T %m/%d&Y"),DATE_FORMAT(FROM_UNIXTIME(`duration`), "%T %m/%d&Y") from scheduled_downtime where host_name="resiscd-ch2-059p.sys.comcast.net";

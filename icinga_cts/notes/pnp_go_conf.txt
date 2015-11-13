@@ -1,0 +1,399 @@
+[root@respoller-ch2d-01c etc]# ll !$
+ll /var/log/spdb_gateway/spdb_gateway.out
+-rw-r--r-- 1 icinga icinga 203792940 Sep  9 12:51 /var/log/spdb_gateway/spdb_gateway.out
+[root@respoller-ch2d-01c etc]# !te
+telnet 0 2003
+Trying 0.0.0.0...
+Connected to 0.
+Escape character is '^]'.
+WPMON @ respoller-ch2d-01c.sys.comcast.net,  Ver 1.19-0.  Welcome, OSS-INF-DEV @ Comcast
+wpmon> help
+
+Help for WPMON commands:
+Usage: add_job  [OPTIONS] -- COMMAND [ARGS]   <-Note the two hyphens "--" which are REQUIRED
+Usage: admin_net | an  [OPTIONS]  [IP]
+Usage: bounce_job | bj [OPTIONS] JOB_NAME
+Usage: del_job [OPTIONS] JOB_NAME
+Usage: disable_job | dj [OPTIONS]  JOB_NAME
+Usage: enable_job | ej [OPTIONS]  JOB_NAME
+Usage: exit | quit                    Disconnect wpmon.py connection, i.e. log out
+Usage: help | ? [COMMAND]
+Usage: hup [OPTIONS]  JOB_NAME
+Usage: modify_job | mj [OPTIONS] -- COMMAND [ARGS]  <-two hyphens are REQUIRED to change cmdline
+Usage: mute                           Toggle mute status
+Usage: reset_job | rj [OPTIONS] JOB_NAME
+Usage: set_param | sp OPTION  VALUE   Change main config parameter
+Usage: show_all | sa | pj
+Usage: show_config | sc
+Usage: show_job | sj [OPTIONS]  JOB_NAME
+Usage: shutdown                       Terminate wpmon.py immediately
+Usage: start_all | ajall              Start all jobs
+Usage: start_job | aj  [OPTIONS]  JOB_NAME
+Usage: stats                          Display basic stats
+Usage: stop_job | oj  [OPTIONS]  JOB_NAME
+Usage: view_param | vp                Display main config parameters
+wpmon> oj spdb_gateway
+
+OK: Stopping 1 job: spdb_gateway
+wpmon> quit
+
+So long, and thanks for all the fish!
+
+Connection closed by foreign host.
+[root@respoller-ch2d-01c etc]# more  /var/log/spdb_gateway/spdb_gateway.out
+
+Log directory /var/log/spdb_gateway not writable
+NAME
+     spdb_gateway
+
+SYNOPSIS
+     spdb_gateway -h
+     spdb_gateway -o <owner> [ options ]
+
+      -h : print out this usage message
+      -o <owner email>; required; no default
+      -p <password>; default is gateway12345
+      -a <app name>; default is spdb_gateway
+      -i <app id>; defaults is 0
+      -d : <configuration file directory>; default is /etc/spdb_gateway.d
+      --spdb_publisher_test
+      --test_publisher
+      --persist_queue <path_to_persist_queue>; defaults is
+           /var/opt/spdb_gateway/spdb_gateway_que
+      -l <log file directory>; default is /var/log/spdb_gateway
+      -L <log file name>; default is spdb_gateway.log
+      -P <port>: control port; default is 65430
+      --log4perl_conf <log4perl config file>|STDOUT:
+           default is internal; see source code.
+      -v : turn VERBOSE mode on. Try it with -h.
+
+DESCRIPTION
+    spdb_gateway manages processes that publish metrics to SPDB by spawning
+    them with pipe connections, and reading their STDOUT. Theses child
+    processes (jobs) focus on collecting sample data, relying on
+    spdb_gateway to deal with the intracacies of SPDB publishing,
+    scheduling, concurrency management and heartbeating.
+
+    Jobs may write to their STDERR; spdb_gateway will log all such output.
+
+    Jobs may be persistent or scheduled. Persistent jobs are automatically
+[root@respoller-ch2d-01c etc]# ll -a /var/log/spdb_gateway
+total 224320
+drwxr-xr-x   2 icinga icinga      4096 Jun  5 15:30 .
+drwxr-xr-x. 14 root   root        4096 Sep  7 10:44 ..
+-rw-r--r--   1 icinga icinga  25875809 Sep  9 14:13 spdb_gateway.log
+-rw-r--r--   1 icinga icinga 203792940 Sep  9 12:51 spdb_gateway.out
+[root@respoller-ch2d-01c etc]# ^C
+You have new mail in /var/spool/mail/root
+[root@respoller-ch2d-01c etc]# vi wpmon.d/spdb_gateway.cfg
+[root@respoller-ch2d-01c etc]# rm ^C
+[root@respoller-ch2d-01c etc]# rm -i /var/log/spdb_gateway/sp*
+rm: remove regular file `/var/log/spdb_gateway/spdb_gateway.log'? y
+rm: remove regular file `/var/log/spdb_gateway/spdb_gateway.out'? y
+[root@respoller-ch2d-01c etc]# !tel
+telnet 0 2003
+Trying 0.0.0.0...
+Connected to 0.
+Escape character is '^]'.
+WPMON @ respoller-ch2d-01c.sys.comcast.net,  Ver 1.19-0.  Welcome, OSS-INF-DEV @ Comcast
+wpmon> sa
+
+ Name                         State   PID  Runs     Uptime    CPU Res MB    Last Exit  Order        Note
+ ----------                 -------   ---  ----   --------    --- ------    ---------  ------       ----
+ merlind                    RUNNING  8061     1   1.2  hrs   5.0%   10.6               default
+ spdb_gateway               RUNNING 30901     1   1.0 mins      -   24.6               default
+wpmon> quit
+
+So long, and thanks for all the fish!
+
+Connection closed by foreign host.
+[root@respoller-ch2d-01c etc]# telnet 0 2003
+Trying 0.0.0.0...
+Connected to 0.
+Escape character is '^]'.
+WPMON @ respoller-ch2d-01c.sys.comcast.net,  Ver 1.19-0.  Welcome, OSS-INF-DEV @ Comcast
+wpmon> bj spdb_gateway
+
+OK: Bouncing 1 jobs: spdb_gateway
+wpmon> quit
+
+So long, and thanks for all the fish!
+
+Connection closed by foreign host.
+[root@respoller-ch2d-01c etc]# ll /var/log/spdb_gateway/sp*
+-rw-rw-r-- 1 icinga icinga 589 Sep  9 14:18 /var/log/spdb_gateway/spdb_gateway.log
+-rw-rw-r-- 1 icinga icinga   0 Sep  9 14:18 /var/log/spdb_gateway/spdb_gateway.out
+[root@respoller-ch2d-01c etc]# cat !$
+cat /var/log/spdb_gateway/sp*
+2015/09/09 10:18:28 INFO SPDB gateway shutting down.
+2015/09/09 10:18:28 DEBUG shutdown: called
+2015/09/09 10:18:28 DEBUG _stop: called
+2015/09/09 10:18:28 INFO Terminating pnp_go
+2015/09/09 10:18:28 INFO Job pnp_go exited normally
+2015/09/09 10:18:30 INFO Exiting spdb_gateway
+2015/09/09 10:18:31 DEBUG _start: addr=127.0.0.1; port=65430; tcl_init_file=init_control_port.tcl; tcpwrap_name=undef;
+2015/09/09 10:18:31 DEBUG _start: SocketFactory created: sfid=1;
+2015/09/09 10:18:31 INFO Started job pnp_go
+2015/09/09 10:18:31 INFO Connected to ossapp-ch2-49p.sys.comcast.net:12345 (sid=4)
+[root@respoller-ch2d-01c etc]# ps -ef | grep pnp_go
+icinga   13688 13660  0 14:18 ?        00:00:00 /usr/bin/perl /data/nagios/pnp/bin/pnp_go_gateway.pl
+root     21317 23773  0 14:19 pts/0    00:00:00 grep pnp_go
+[root@respoller-ch2d-01c etc]# kill -9 1688
+-bash: kill: (1688) - No such process
+You have new mail in /var/spool/mail/root
+[root@respoller-ch2d-01c etc]# kill -9 16388
+-bash: kill: (16388) - No such process
+[root@respoller-ch2d-01c etc]# kill -9 13688
+[root@respoller-ch2d-01c etc]# !ps
+ps -ef | grep pnp_go
+icinga   20627 13660  2 14:23 ?        00:00:00 /usr/bin/perl /data/nagios/pnp/bin/pnp_go_gateway.pl
+root     22791 23773  0 14:23 pts/0    00:00:00 grep pnp_go
+[root@respoller-ch2d-01c etc]# cat spdb_gateway.d/pnp_go.cfg
+pnp_go.cfg          pnp_go.cfg.rpmnew   pnp_go.cfg.rpmsave
+[root@respoller-ch2d-01c etc]# cat spdb_gateway.d/pnp_go.cfg
+$VAR1 = {
+     'cmd' => '/data/nagios/pnp/bin/pnp_go_gateway.pl',
+};
+[root@respoller-ch2d-01c etc]# ll /data/nagios/pnp/bin/
+total 6944
+-rwxrwxr-x 1 icinga icinga     830 Jul 29 15:07 convert_meta.sh
+-rwxrwxr-x 1 icinga icinga 7090744 Jul 29 15:07 pnp_go
+-rwxrwxr-x 1 icinga icinga     740 Jul 29 15:07 pnp_go_gateway.pl
+-rwxrwxr-x 1 icinga icinga     405 Jul 29 15:07 pnp_go_wrapper.sh
+-rwxrwxr-x 1 icinga icinga     158 Jul 29 15:07 SPDB_conn_check.sh
+[root@respoller-ch2d-01c etc]# ^C
+[root@respoller-ch2d-01c etc]# vi spdb_gateway.d/pnp_go.cfg
+You have new mail in /var/spool/mail/root
+[root@respoller-ch2d-01c etc]# !ps
+ps -ef | grep pnp_go
+root     17206 23773  0 14:26 pts/0    00:00:00 grep pnp_go
+icinga   20627 13660  0 14:23 ?        00:00:00 /usr/bin/perl /data/nagios/pnp/bin/pnp_go_gateway.pl
+[root@respoller-ch2d-01c etc]# !t
+telnet 0 2003
+Trying 0.0.0.0...
+Connected to 0.
+Escape character is '^]'.
+WPMON @ respoller-ch2d-01c.sys.comcast.net,  Ver 1.19-0.  Welcome, OSS-INF-DEV @ Comcast
+wpmon> bj spdb_gateway
+
+OK: Bouncing 1 jobs: spdb_gateway
+wpmon> quit
+
+So long, and thanks for all the fish!
+
+Connection closed by foreign host.
+[root@respoller-ch2d-01c etc]# ps -ef | grep pnp_go
+icinga   21635 21550 29 14:26 ?        00:00:01 /data/nagios/pnp/bin/pnp_go
+root     22153 23773  0 14:26 pts/0    00:00:00 grep pnp_go
+[root@respoller-ch2d-01c etc]# tail -500f /data/nagios/pnp//log/pnp_go.log
+   21635 2015.09.09-14:27:09 metrics_unknown stats4j_getSSML_Codebig_Failure_Count
+   21635 2015.09.09-14:27:09 metrics_unknown stats4j_getSSML_Memcached_Mean
+   21635 2015.09.09-14:27:09 metrics_unknown stats4j_getVoicemailList_Codebig_Mean
+   21635 2015.09.09-14:27:09 metrics_unknown stats4j_getVoicemailTranscribedText_Codebig_Mean
+   21635 2015.09.09-14:27:09 metrics_unknown stats4j_getSSML_Codebig_Mean
+   21635 2015.09.09-14:27:09 metrics_unknown stats4j_deleteVoicemailMessage_Codebig_Mean
+   21635 2015.09.09-14:27:09 metrics_unknown stats4j_getSSML_Codebig_Mean
+   21635 2015.09.09-14:27:09 metrics_unknown stats4j_undeleteVoicemailMessage_Codebig_Failure_Count
+   21635 2015.09.09-14:27:09 metrics_unknown stats4j_getSubscriberProfile_Failure_Count
+   21635 2015.09.09-14:27:09 metrics_unknown stats4j_Plaxo_GetSession_Memcached_Failure_Count
+   21635 2015.09.09-14:27:09 metrics_unknown stats4j_getSSML_Codebig_Failure_Count
+   21635 2015.09.09-14:27:09 metrics_unknown stats4j_getVoicemailCount_Codebig_Failure_Count
+   
+   
+   
+   
+   [root@respoller-ch2d-01c etc]# cat sysconfig/pnp_go_conf
+# File: /etc/sysconfig/pnp_go_conf
+# Most Values in this config have defaults that will work
+# in the typical setup of pnp_go.
+# If your configuration requires different values you can
+# uncomment the parameter you need and change the value to what you need.#
+
+# PNP_GO_BASE The base directory for pnp_go
+# and can be set to an location
+export PNP_GO_BASE=/data/nagios/pnp
+
+# PNP_CODE_LINE is the same as the command flag -code_line default: "false"
+# Can be set to true to include line of code responsible for the log message
+# export PNP_CODE_LINE=true
+
+# PNP_CONTRONL_PORT same as flag -control_port default: "54321":
+# export PNP_CONTRONL_PORT="<put your custom port here>"
+
+# PNP_INPUT same as flag -input default: "stdin"
+#
+# Wnen not set it defaults to "stdin"
+# getting records from stdin normally supplied by
+# nagios broker module and the pnpfeeder library.
+# This is the way it was original designed to work
+# export PNP_INPUT=stdin
+#===========
+## File example: Use to test a file. This is helpful for debugging
+## The "file:" test pnp_go that the input is a file and is a part
+## of the required systax for processing a file.
+## It is suggested to use the flag: -input=file:/tmp/test_data.txt
+## for testing files over setting the PNP_INPUT to a file in the config
+## because pnp_go will exit when it hits the EOF
+##
+## export PNP_INPUT=file:/tmp/test_data.txt
+#============
+## Monitor directory example:
+## This mode was created for those systems that place their metrics
+## into individual files in a directory.  Files that are processed and have
+## at least one successfully metric will be DELETED.
+## if a file has zero successful metrics it will get renamed with a prefix
+## of "no_sample." i.e. ServiceData.1234 no_sample.ServiceData.1234
+## the syntax includes three parts: The type tag of "direcory:" that
+## tells pnp_go to monitor a directory for input. Part two is the directory
+## path or where to find files that match the third part, the filename pattern.
+## Beause invalid files are renamed with a prefix of no_sample file that begin
+## with prefix will be ignored to prevent re-processing on when file patterns
+## begin with a wild card
+##
+## export PNP_INPUT=directory:/var/spool/pnp_data/ServiceData*
+#=============
+
+export PNP_INPUT=directory:/var/spool/icinga2/perfdata/service-perfdata*
+## Monitor a port for input example:
+## This mode was setup to allow a system to send its metrics to a port
+## normally on the same host.
+## The syntax includes three parts: The type tag of "port:",
+## the host (usually localhost) followed by a ":" (colon) and then
+## the port number.
+##
+## export PNP_INPUT=port:localhost:5661
+
+# PNP_OUTPUT same as the flag -output Default: localhost:5661
+# The default output to a port is setup because SPDB gateway wants
+# to control a job as does nagios. Nagios was configured to control
+# pnp_go and send input via the stdout to stdin pipe. SPDB gateway
+# control a listener that outputs all records it gets on the port to
+# stdout and send to SPDB gateway via its stdout to stdin.
+# output can be sent directly to stdout which is helpful when testing
+# and debugging. Also when the input is "monitor a directory" then
+# SPDB gateway can control pnp_go directly instead of using the
+# listener in the middle. The same port cannot be configure for both
+# PNP_INPUT and PNP_OUTPUT.
+#
+ export PNP_OUTPUT=stdout
+#
+# send to default port (not actually required as it is the default)
+# export PNP_OUTPUT=port:localhost:5661
+
+# PNP_OUTPUT_PORT_REFRESH_DELAY same as -output_port_refresh_delay  Default: "3s"
+# When output is pointed to a port, this setting, in the form of a time duration,
+# tell pnp_go how often to try to reconnect to the port after a failed or attempt
+# or unexpected disconnect. Note "3s" equals 3 seconds
+#
+# Set to 3 seconds (not actually required as it is the default)
+# export PNP_OUTPUT_PORT_REFRESH_DELAY="3s"
+
+# PNP_META_PATH same as -meta_path default: /data/nagios/pnp/etc/spdb_meta_data.cfg
+# This is the full path of the SPDB meta data file
+#
+# export PNP_META_PATH=$PNP_GO_BASE/etc/spdb_meta_data.cfg
+
+# PNP_META_REFRESH same as -meta_refresh default: "30s"
+# This is how often to check if the SPDB meta data file has
+# been updated and reload if it has
+#
+# export PNP_META_REFRESH="30s"
+
+# PNP_LOG_DIR same as flag -log_dir Default: "/data/nagios/pnp/log"
+# This is the directory where logging will be done including any trace
+# files.
+#
+# Note: If this value is changed than the log rotate configs need to be changed as well.
+#
+# export PNP_LOG_DIR="$PNP_GO_BASE/log"
+
+# PNP_NAGIOS_STATUS_URL same as flag -nagios_status_url
+#        Default: "http://127.0.0.1/nagios/cgi-bin/statusjson.cgi?display_type=1"
+# This is the url where to pull the nagios status from to map hostgroups. If set
+# to "none", the monitoring of this status will be cancelled.
+#
+# export NP_NAGIOS_STATUS_URL="http://127.0.0.1/nagios/cgi-bin/statusjson.cgi?display_type=1"
+export PNP_NAGIOS_STATUS_URL=none
+# PNP_NAGIOS_STATUS_REFRESH same as flag -nagios_status_refresh Default: "300s"
+# This is how often the nagios status is pulled and reload in to pnp_go in the
+# form of time duration ("300s" same as "5m" is 300 seconds or 5 minutes.
+# If set to 0, monitoring will be cancelled.
+#
+# export PNP_NAGIOS_STATUS_REFRESH="300s"
+
+# PNP_TEST_MODE same as flag -test_mode Default: "false"
+# This is not a setting that will be typically found in a production
+# system. Whebn set to true all metris will go to test nodetypes.
+#
+# export PNP_TEST_MODE="false"
+
+# PNP_VALIDATE same as flag -validate="false"
+# This is used to exit pnp_go one the SPDB meta data file has logged
+# it validation. This would not typically be in a production environment,
+# but could be used in an environment specifically used to test the
+# SPDB meta data file
+#
+# export PNP_VALIDATE="false"
+[root@respoller-ch2d-01c etc]# cat sysconfig/pnp_go_conf | grep export
+export PNP_GO_BASE=/data/nagios/pnp
+# export PNP_CODE_LINE=true
+# export PNP_CONTRONL_PORT="<put your custom port here>"
+# export PNP_INPUT=stdin
+## export PNP_INPUT=file:/tmp/test_data.txt
+## export PNP_INPUT=directory:/var/spool/pnp_data/ServiceData*
+export PNP_INPUT=directory:/var/spool/icinga2/perfdata/service-perfdata*
+## export PNP_INPUT=port:localhost:5661
+ export PNP_OUTPUT=stdout
+# export PNP_OUTPUT=port:localhost:5661
+# export PNP_OUTPUT_PORT_REFRESH_DELAY="3s"
+# export PNP_META_PATH=$PNP_GO_BASE/etc/spdb_meta_data.cfg
+# export PNP_META_REFRESH="30s"
+# export PNP_LOG_DIR="$PNP_GO_BASE/log"
+# export NP_NAGIOS_STATUS_URL="http://127.0.0.1/nagios/cgi-bin/statusjson.cgi?display_type=1"
+export PNP_NAGIOS_STATUS_URL=none
+# export PNP_NAGIOS_STATUS_REFRESH="300s"
+# export PNP_TEST_MODE="false"
+# export PNP_VALIDATE="false"
+[root@respoller-ch2d-01c etc]# grep . spdb_gateway.d/*
+spdb_gateway.d/pnp_go.cfg:$VAR1 = {
+spdb_gateway.d/pnp_go.cfg:     'cmd' => '/data/nagios/pnp/bin/pnp_go_wrapper.sh',
+spdb_gateway.d/pnp_go.cfg:};
+spdb_gateway.d/pnp_go.cfg.rpmnew:$VAR1 = {
+spdb_gateway.d/pnp_go.cfg.rpmnew:     'cmd' => '/data/nagios/pnp/bin/pnp_go_gateway.sh',
+spdb_gateway.d/pnp_go.cfg.rpmnew:};
+spdb_gateway.d/pnp_go.cfg.rpmsave:$VAR1 = {
+spdb_gateway.d/pnp_go.cfg.rpmsave:   'cmd' => '/data/nagios/pnp/bin/pnp_go_wrapper.sh',
+spdb_gateway.d/pnp_go.cfg.rpmsave:};
+[root@respoller-ch2d-01c etc]# ll /var/spool/icinga2/perfdata/
+total 3541600
+-rw-r--r-- 1 icinga icinga  265935 Sep  7 10:58 host-perfdata.1441623527
+-rw-r--r-- 1 icinga icinga  343110 Sep  7 10:59 host-perfdata.1441623557
+-rw-r--r-- 1 icinga icinga  313208 Sep  7 10:59 host-perfdata.1441623587
+-rw-r--r-- 1 icinga icinga  184702 Sep  7 11:00 host-perfdata.1441623617
+-rw-r--r-- 1 icinga icinga  164736 Sep  7 11:00 host-perfdata.1441623647
+-rw-r--r-- 1 icinga icinga  182017 Sep  7 11:01 host-perfdata.1441623677
+-rw-r--r-- 1 icinga icinga  160897 Sep  7 11:01 host-perfdata.1441623707
+-rw-r--r-- 1 icinga icinga  185532 Sep  7 11:02 host-perfdata.1441623737
+
+
+
+[root@respoller-ch2d-01c etc]# ll /var/spool/icinga2/perfdata/ser* | wc -l
+6051
+[root@respoller-ch2d-01c etc]# ll /var/spool/icinga2/perfdata/ser* | wc -l
+ls: cannot access /var/spool/icinga2/perfdata/service-perfdata.1441627400: No such file or directory
+6048
+[root@respoller-ch2d-01c etc]# ll /var/spool/icinga2/perfdata/ser* | wc -l
+6043
+[root@respoller-ch2d-01c etc]# ll /var/spool/icinga2/perfdata/ser* | wc -l
+ls: cannot access /var/spool/icinga2/perfdata/service-perfdata.1441628690: No such file or directory
+6014
+You have new mail in /var/spool/mail/root
+[root@respoller-ch2d-01c etc]# ll /var/spool/icinga2/perfdata/ser* | wc -l
+5979
+[root@respoller-ch2d-01c etc]# ll /var/spool/icinga2/perfdata/ser* | wc -l
+ls: cannot access /var/spool/icinga2/perfdata/service-perfdata.1441630006: No such file or directory
+5977
+[root@respoller-ch2d-01c etc]#
+[root@respoller-ch2d-01c etc]#
+[root@respoller-ch2d-01c etc]#
+[root@respoller-ch2d-01c etc]#

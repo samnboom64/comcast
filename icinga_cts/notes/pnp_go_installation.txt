@@ -1,0 +1,153 @@
+
+
+
+Steps involve in pnp_go installation 
+
+step1:
+======================================================
+yum install pnp_go spdb_gateway wpmon
+
+
+
+ 
+ step 2:
+ ====================================================
+vim /etc/spdb_gateway.d/pnp_go.cfg
+ [root@respoller-cmcd-01c etc]# cat /etc/spdb_gateway.d/pnp_go.cfg
+$VAR1 = {
+     'cmd' => '/data/nagios/pnp/bin/pnp_go_wrapper.sh',
+};
+
+[root@respoller-ch2d-01c ~]# ll /etc/spdb_gateway.d/pnp_go.cfg
+-rw-r--r-- 1 root root 69 Sep  9 14:25 /etc/spdb_gateway.d/pnp_go.cfg
+
+step3 
+========================================================
+
+[root@respoller-cmcd-01c etc]# cat /etc/wpmon.d/spdb_gateway.cfg
+[spdb_gateway]
+run_user  = icinga
+run_group = icinga
+log_out = /var/log/spdb_gateway/spdb_gateway.out
+log_err = /var/log/spdb_gateway/spdb_gateway.log
+run_dir = /data/nagios/pnp/log
+environment = PERL5LIB=/usr/local/lib/neto_io/lib/perl5
+cmd = /usr/local/spdb_gateway/bin/spdb_gateway_wrapper.sh
+
+
+[root@respoller-ch2d-01c ~]# ll /etc/wpmon.d/spdb_gateway.cfg
+-rw-r--r-- 1 root root 296 Sep  9 14:16 /etc/wpmon.d/spdb_gateway.cfg
+
+
+
+step 4:
+==========================================================
+[root@respoller-cmcd-01c etc]# cat /etc/sysconfig/pnp_go_spdb_gateway
+# File: /etc/sysconfig/pnp_go_spdb_gateway
+# parameter used by spdb_gateway
+# added by pnp_go
+#------------------
+# Dan Grady 20150716
+#------------------
+# Add the proper SPDB account information below
+# Goto the service catalog to request an account if you do not have one.
+# https://servicecatalog.cable.comcast.com/sc/catalog.product.asp?parent_category_id=InfraToolsReq&category_id=InfraToolsReq&product_id=IS-InfraDevSPDB
+#++++
+#
+export SPDB_GATEWAY_OWNER_EMAIL=nithin_nayak@cable.comcast.com
+export SPDB_GATEWAY_APP_NAME=nagios_feed
+export SPDB_GATEWAY_APP_ID=0
+export SPDB_GATEWAY_PASSWD=nag828deef
+
+
+
+[root@respoller-ch2d-01c ~]# ll /etc/sysconfig/pnp_go_spdb_gateway
+-rw-r--r-- 1 root root 608 Sep  9 13:20 /etc/sysconfig/pnp_go_spdb_gateway
+
+
+
+
+step:
+===================================
+[root@respoller-cmcd-01c etc]# cat /usr/local/spdb_gateway/spdb_gateway.wpmon
+[spdb_gateway]
+run_user  = icinga
+run_group = icinga
+log_out = /dev/null
+log_err = /dev/null
+run_dir = /
+environment = PERL5LIB=/usr/local/lib/neto_io/lib/perl5
+cmd = /usr/local/spdb_gateway/spdb_gateway -o nithin_nayak@cable.comcast.com
+
+
+[root@respoller-ch2d-01c ~]# ll /usr/local/spdb_gateway/spdb_gateway.wpmon
+-rwxr-xr-x 1 nobody nobody 238 Sep  8 14:46 /usr/local/spdb_gateway/spdb_gateway.wpmon
+
+step5:
+=====================================================================
+
+cat /etc/sysconfig/pnp_go_conf
+export PNP_GO_BASE=/data/nagios/pnp
+export PNP_INPUT=directory:/var/spool/icinga2/perfdata/service-perfdata*
+export PNP_OUTPUT=stdout
+export PNP_NAGIOS_STATUS_URL=none
+
+[root@respoller-ch2d-01c ~]# ll /etc/sysconfig/pnp_go_conf
+-rw-r--r-- 1 root root 5850 Sep  9 13:27 /etc/sysconfig/pnp_go_conf
+
+step6:
+================================================================
+chown icinga:icinga /data/nagios/pnp -R
+chown icinga:icinga /var/log/spdb_gateway -R
+chown icinga:icinga /var/opt/spdb_gateway -R
+
+
+
+
+step6:
+============================================================
+touch /data/nagios/pnp/etc/spdb_meta_data.cfg
+/data/nagios/pnp/bin/convert_meta.sh /
+
+
+
+[root@respoller-ch2d-01c ~]# ll /data/nagios/pnp/etc/spdb_meta_data.cfg
+-rw-r--r-- 1 icinga icinga 2031 Sep  9 13:27 /data/nagios/pnp/etc/spdb_meta_data.cfg
+
+
+
+
+step7:
+=====================================================================
+
+
+cp /usr/local/spdb_gateway/spdb_gateway.service /etc/init.d/spdb_gateway
+chkconfig --add spdb_gateway
+/etc/init.d/spdb_gateway status
+/etc/init.d/spdb_gateway start
+
+
+
+
+
+
+rm -rf /data/nagios/pnp/etc/spdb_meta_data.cfg
+rm -rf /etc/sysconfig/pnp_go_conf
+rm -rf /usr/local/spdb_gateway/spdb_gateway.wpmon
+rm -rf /etc/sysconfig/pnp_go_spdb_gateway
+rm -rf /etc/wpmon.d/spdb_gateway.cfg
+rm -rf /etc/spdb_gateway.d/pnp_go.cfg
+rm -rf /etc/init.d/spdb_gateway
+
+ls -ltrh /data/nagios/pnp/etc/spdb_meta_data.cfg
+ls -ltrh /etc/sysconfig/pnp_go_conf
+ls -ltrh /usr/local/spdb_gateway/spdb_gateway.wpmon
+ls -ltrh /etc/sysconfig/pnp_go_spdb_gateway
+ls -ltrh /etc/wpmon.d/spdb_gateway.cfg
+ls -ltrh /etc/spdb_gateway.d/pnp_go.cfg
+ls -ltrh /etc/init.d/spdb_gateway
+
+
+chown icinga:icinga /data/nagios/pnp -R
+chown icinga:icinga /var/log/spdb_gateway -R
+chown icinga:icinga /var/opt/spdb_gateway -R

@@ -1,0 +1,20 @@
+/opt/neto/bin/issue_cmd -h respref-ch2d-05c.sys.comcast.net "curl -kX GET https://dcasvc.sys.comcast.net/configuration-management-service/clean_host/respref-ch2d-05c.sys.comcast.net -u skumar063c"
+/opt/neto/bin/issue_cmd -h respref-ch2d-05c.sys.comcast.net "rm -rf /etc/puppet/ssl"
+/opt/neto/bin/issue_cmd -h respref-ch2d-05c.sys.comcast.net "puppet agent --test --tags sudoers"
+/opt/neto/bin/issue_cmd -h respref-ch2d-05c.sys.comcast.net "curl -kX GET https://dcasvc.sys.comcast.net/configuration-management-service/clean_host/respref-ch2d-05c.sys.comcast.net -u skumar063c"
+/opt/neto/bin/issue_cmd -h respref-ch2d-05c.sys.comcast.net "rm -rf /etc/puppet/ssl"
+
+/opt/neto/bin/issue_cmd -h respref-ch2d-05c.sys.comcast.net "puppet agent --test --tags sudoers --certname respref-ch2d-05c.sys.comcast.net"
+ 1108  history
+-sh-4.1$
+
+
+
+Error: Could not retrieve catalog from remote server: Error 400 on SERVER: Could not parse for environment pe_ops_res_prod: Syntax error at '<<'; expected '}' at /app/copa/puppet/conf/environments/pe_ops_res_prod/manifests/nodes/rescsv.pp:40 on node respref-ch2d-05c.sys.comcast.net
+Warning: Not using cache on failed catalog
+Error: Could not retrieve catalog; skipping run
+
+
+
+/opt/neto/bin/issue_cmd -h resqmta-ch2-02v.sys.comcast.net "curl -kX GET https://dcasvc.sys.comcast.net/configuration-management-service/clean_host/resqmta-ch2-02v.sys.comcast.net -u skumar063c"
+/opt/neto/bin/issue_cmd -h resqmta-ch2-02v.sys.comcast.net "rm -rf /etc/puppet/ssl"

@@ -1,0 +1,119 @@
+﻿git pull
+git checkout skumar_working
+git pull prod master
+
+git add modules/res_dir/templates/external_source_cfg_data.erb
+git add modules/res_dir/templates/external_source_cfg_router.erb
+
+
+
+git commit -a -m "icinga2_ido_hiera change"
+git push origin skumar_working
+git checkout master
+git pull
+git merge skumar_working
+git push origin master
+
+
+
+resmail-po-579v.sys.comcast.net
+
+
+sudo puppet agent --test sudoers
+
+nagios_client_nrpe
+hostmon_config_new
+Prod
+
+git checkout skumar_working
+git pull test skumar_working
+git fetch --tags
+git tag -l
+
+
+git tag -a res-1214 -m 'nrpe.cfg for new poller'
+git push origin res-1214
+git branch -a
+git checkout master
+git pull
+git merge res-1214
+git push origin master
+
+:wq
+
+
+net 
+puppet parser validate /home/skumar063c/magnato/puppet_test/modules/res_pref/manifests/voice_war_depoly.pp
+
+
+
+
+notify => Service['tomcat'],
+
+
+/etc/hostmon/conf.d/external_source.cfg
+
+
+Facter.add("dsa_array") do
+      setcode do
+    output_string = Facter::Util::Resolution.exec('su - dsa -c "/opt/CA/eTrustDirectory/dxserver/bin/dxserver status"')
+        dsa_array = output_string.split("/\n/started/\n/,','")
+                dsa_array
+              end
+end
+
+48849450
+24905465.8
+
+228907348.
+
+
+Cairo::GObject
+
+
+
+ pkgconfig(cairo) is needed by (installed) pango-devel-1.28.1-10.el6.x86_64
+        pkgconfig(cairo) is needed by (installed) gtk2-devel-2.24.23-6.el6.x86_64
+        cairo-devel >= 1.7.6 is needed by (installed) pango-devel-1.28.1-10.el6.x86_64
+        cairo-devel >= 1.6.0-1 is needed by (installed) gtk2-devel-2.24.23-6.el6.x86_64
+        cairo-devel(x86-64) is needed by (installed) ghc-cairo-devel-0.12.2-2.el6.x86_64
+
+		
+		Dependencies Resolved
+
+=====================================================================================================================================================
+ Package                           Arch                     Version                           Repository                                        Size
+=====================================================================================================================================================
+Removing:
+ cairo-devel                       x86_64                   1.8.8-3.1.el6                     @atlas-repo-92-rhel_6_x86_64                     1.9 M
+Removing for dependencies:
+ ghc-cairo-devel                   x86_64                   0.12.2-2.el6                      @atlas-repo-100-epel_6_x86_64                    8.7 M
+ gtk2-devel                        x86_64                   2.24.23-6.el6                     @atlas-repo-92-rhel_6_x86_64                      15 M
+ libgxim-devel                     x86_64                   0.3.3-3.1.el6                     @atlas-repo-96-centos_6_x86_64                   813 k
+ pango-devel                       x86_64                   1.28.1-10.el6                     @atlas-repo-92-rhel_6_x86_64                     2.2 M
+ webkitgtk-devel                   x86_64                   1.4.3-9.el6_6                     @atlas-repo-96-centos_6_x86_64                   2.7 M
+
+Transaction Summary
+=====================================================================================================================================================
+Remove        6 Package(s)
+
+
+
+
+
+
+
+
+
+
+
+
+
+1)worked on puppet issue on xc38 on beta server
+2)worked on troubleshooting steps on broken icinga master node and cerficate issue
+
+
+
+
+
+
