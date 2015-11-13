@@ -1,0 +1,16 @@
+classes:
+        - icinga2::icinga_installation
+        - icinga2::pnp_go_inst        
+
+icinga2::icinga_installation::service_restart:
+                                        c:
+                                          service: mysqld
+
+
+
+icinga2::icinga_installation::files:
+                zones_conf:
+                        files: /etc/icinga2/zones.conf
+                        user: icinga
+                        mode: "600"
+                        source: /etc/icinga2/zones_agile.conf
