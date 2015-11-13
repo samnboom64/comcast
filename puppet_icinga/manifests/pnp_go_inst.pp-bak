@@ -1,0 +1,107 @@
+class icinga2::pnp_go_inst{
+
+$rpm_pre =[ 'wpmon', 'spdb_gateway', 'pnp_go' ]
+
+package { $rpm_pre:
+    ensure => latest,
+  #  require => Yumrepo['icinga2-repo-file'],
+  }->
+
+icinga2::pnp_go_inst::feature { 'perfdata':
+         notify => Service[icinga2]
+  }->
+
+
+
+icinga2::pnp_go_inst::files {
+"/data/nagios/pnp/etc/spdb_meta_data.cfg": user1 => "icinga" , mode => "644";
+"/etc/sysconfig/pnp_go_conf": user1 => "root" , mode => "644";
+"/usr/local/spdb_gateway/spdb_gateway.wpmon": user1 => "nobody" , mode => "755";
+"/etc/sysconfig/pnp_go_spdb_gateway": user1 => "root" , mode => "644";
+"/etc/wpmon.d/spdb_gateway.cfg": user1 => "root" , mode => "644";
+"/etc/spdb_gateway.d/pnp_go.cfg": user1 => "root" , mode => "644";
+"/etc/icinga2/features-enabled/perfdata.conf": user1 => "icinga" , mode => "640";
+#"/etc/init.d/spdb_gateway": user1 => "root" , mode => "755", source => "/usr/local/spdb_gateway/spdb_gateway.service";
+}->
+
+file { "/etc/init.d/spdb_gateway":
+        ensure => "file",
+        owner => root,
+        group => root,
+        mode  => 755,
+        source => "/usr/local/spdb_gateway/spdb_gateway.service",
+
+  }->
+
+
+
+
+exec { "add spdb_gateway chkconfig":
+          command  => "chkconfig --add spdb_gateway",
+     }->
+
+
+
+service { 'spdb_gateway':
+        enable => true,
+    ensure => running,
+    hasrestart => true,
+}->
+
+
+
+icinga2::pnp_go_inst::folder_perm {
+ "/data/nagios/pnp": ;
+"/var/log/spdb_gateway": ;
+"/var/opt/spdb_gateway": ;
+
+}
+
+
+
+
+
+
+#Defines:
+
+
+
+
+define icinga2::pnp_go_inst::files ($feature = $title,$user1,$mode) {
+  file { "$feature":
+        ensure => "file",
+        owner => $user1,
+        group => $user1,
+        mode  => $mode,
+         source => "puppet:///modules/icinga2$feature",
+
+  }
+}
+
+
+define icinga2::pnp_go_inst::folder_perm ($feature = $title){
+
+exec { "permission-${feature}":
+          command  => "chown -R icinga:icinga $feature",
+     }
+
+        }
+
+define icinga2::pnp_go_inst::feature ($feature = $title)
+	{
+	exec { "icinga2-feature-${feature}":
+    path => '/bin:/usr/bin:/sbin:/usr/sbin',
+    unless => "readlink /etc/icinga2/features-enabled/${feature}.conf",
+    command => "icinga2 feature enable ${feature}",
+  }
+
+
+
+}
+
+
+
+
+
+}
+

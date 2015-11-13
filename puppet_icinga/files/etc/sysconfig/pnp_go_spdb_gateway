@@ -1,0 +1,15 @@
+# File: /etc/sysconfig/pnp_go_spdb_gateway
+# parameter used by spdb_gateway
+# added by pnp_go
+#------------------
+# Dan Grady 20150716
+#------------------
+# Add the proper SPDB account information below
+# Goto the service catalog to request an account if you do not have one.
+# https://servicecatalog.cable.comcast.com/sc/catalog.product.asp?parent_category_id=InfraToolsReq&category_id=InfraToolsReq&product_id=IS-InfraDevSPDB
+#++++
+#
+export SPDB_GATEWAY_OWNER_EMAIL=nithin_nayak@cable.comcast.com
+export SPDB_GATEWAY_APP_NAME=nagios_feed
+export SPDB_GATEWAY_APP_ID=0
+export SPDB_GATEWAY_PASSWD=nag828deef

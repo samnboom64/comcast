@@ -1,0 +1,4 @@
+export PNP_GO_BASE=/data/nagios/pnp
+export PNP_INPUT=directory:/var/spool/icinga2/perfdata/service-perfdata*
+export PNP_OUTPUT=stdout
+export PNP_NAGIOS_STATUS_URL=none

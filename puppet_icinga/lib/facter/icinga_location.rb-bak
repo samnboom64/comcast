@@ -1,0 +1,22 @@
+Facter.add('icinga_location') do
+  setcode do
+    hostname = Facter.value(:hostname)
+    case hostname
+    when /^resplr-ch2-*/
+	'ch2'
+    when /^resplr-po-*/
+	'po'
+    when /^restool-cmcd-*/
+      'cmcd'
+    when /^restool-ch2d-*/
+      'ch2d'
+    when /^respoller-ch2d-*/
+	'ch2d'
+    when /^respoller-cmcd-*/
+         'cmcd'		
+    else
+      hostname
+    end
+  end
+end
+
