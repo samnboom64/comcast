@@ -1,6 +1,0 @@
-
-
-
- openssl s_client -CAfile /etc/icinga2/pki/ca.crt -cert /etc/icinga2/pki/respoller-ch2d-04c.crt -key /etc/icinga2/pki/respoller-ch2d-04c.key -connect respoller-ch2d-03c:5665
- 
-  openssl verify -verbose -CAfile /etc/icinga2/pki/ca.crt /etc/icinga2/pki/respoller-ch2d-04c.crt

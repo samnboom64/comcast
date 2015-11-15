@@ -1,4 +1,0 @@
-
-
-export PATH=/app/interpreters/ruby/1.9.3/bin:$PATH
-gem install puppet -v 3.4.3
