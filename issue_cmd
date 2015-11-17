@@ -1,0 +1,1089 @@
+#!/usr/bin/perl 
+#############################################################################
+# Program: issue_cmd
+# Author: Ryan Richins
+# Date:   07/31/2008
+# Version: 1.0
+#
+# Description:
+#
+# This script is the main administrative script for the NETO system.  It
+# runs in four incarnations: issue_cmd and issue_port.  Each of these 
+# incarnations also has a _neg version that runs
+# against hosts not specified in the initial regex. What it does will be
+# determined by the incarnation that it is running in.
+#
+# Incarnations:
+#
+# issue_port, issue_port_neg
+#
+# This script is used to issue control port commands to the system.
+# It can be invoked in two ways.  If a host list is specified (the default)
+# it will connect to port 5601 (unless overridden by the -p flag) on each
+# of the hosts in the list that match the specified regex.   It will then issue 
+#the command or commands specified to  the control port and show the 
+#output to the user.
+#
+# issue_cmd, issue_cmd_neg
+#
+# This script is used to remsh commands to machines.  If a host list is
+# specified (the default) it will remsh to the hosts in the list that match
+# the specified regex.  It will then issue the
+# command or commands specifed via remsh to each host.
+#
+# Details:
+#
+# List files can be specified by the -l flag.  By default these will
+# be searched for in the /opt/neto/config directory.  If they are somewhere else
+# the whole path will need to be specified.  If a list file is not specified
+# the script will try to determine the correct one to run based up on the
+# type of run and the domain.   Multiple list files can be specified as
+# well as individual list lines (-h).  The user should make sure that all list
+# files are of the same  type and the list line is of the same type as the 
+# list files specified.  Negative lists and negative list lines can be specified. 
+# If the lines  in the negative list or the negative list lines exactly match a line in
+# other lists, those lines will be removed.
+#
+# One regex should always be provided as the first argument.  This regex
+# can be negated if it is proceeded with an '!' or the negative version of
+# the script it invoked (ie issue_port_neg).  Additional regex's can also
+# be supplied with the -g or -hg flags.  These regexs can also be negated
+# by preceeding them with a '!' and each regex will further whittle down the
+# list.  The unflagged regex and those specified by -g always apply to the
+# first field of the list (as separated by :'s).  The -hg regex always
+# applies to the host field of the list (3rd field).  The -hg flag should
+# not be used on host lists that are not colon separated.
+#
+# Commands are specified as the second and higher unflagged parameters (the
+# first unflagged param is the required regex).  Commands can also be
+# specified in a command list (-c) which is a file that contains the commands
+# to be run.  One or more commands or a command list must be specified.
+#
+# For  issue_port, the program will show all output of specified
+# control port command up to the end delimitor which matches the following regex
+# '\w+\s(OK|UNKNOWN)'  for the next command.  There are
+# some control port commands that return their data after the above prompt.  To be able
+# to see the output of these commands you must identify a string that denotes
+# the end of the output and specify that to issue_port via the -oe flag.
+#
+# Any errors that are encountered in issue_port are written
+# to the error list file.  By default this file contains a time stamp and
+# is written to the /opt/neto/log/issue_errors directory.  The name of the
+# error list file can be overridden by the -e flag.
+#
+# The domain is specified by the environment variable QUEUE_DOMAIN or
+# overridden by the -d flag.  By default it is 'voicemail'.
+#
+# If the program is run interactively it will show the user what it is
+# going to to and prompt them for confirmation that it can continue.  This
+# will not happen if the output is redirected or if the program is not run
+# interactively.  This user prompting can also be turned off by specifying
+# the -y flag.
+#
+# All interactive runs of this command will be logged in /opt/neto/log
+# in the file <program_name>.log unless overridded by the -log flag which
+# allows another location/name for the log.
+#
+# The type of run can be overridden by the -port, or -cmd flags.
+#
+# The number of parallel connections is defaulted to 10 and can be changed
+# by the -b flag.
+#
+# The program runs mrun underneth as it's main engine.  Normally mrun
+# is run in force mode and will not prompt the user for any input.  It can
+# be run in nonforce mode by specifying the -nf flag.  This is useful if
+# the user needs to carefully look at the output from each host/process.
+#
+# A userid, password, and/or privileges can also be specified on the command
+# line.  If they are specified then a 'user <pass> <privs>' command will
+# be issued to the control ports to authenticate the user
+# before any of the other commands are run.  In issue_cmd only the -user
+# flag is used.  Also, if just -user, -pass, or -priv flag is specified with
+# no value, the program will prompt the user for their values (in
+# interactive mode).  When this is done the passwd will not be echoed to
+# the screen.  Please note that an unflagged paramater (like the main regex
+# or a command) should not follow a bare -user, -pass, or -priv flags. If this
+# is done, the unfagged parameter will be treated as the value of the bare
+# flag.  It is best to put -user, -pass, and -priv at the end of the command
+# line and the unflagged parameters at the beginning to avoid this.
+#
+# The class of the run may be specified by the -class flag.  If this flag is
+# specified an additional regex for the class will be gotten from the class
+# file (/opt/neto/config/domain_class_config).  This regex will limit the user
+# to only hitting hosts in the class as defined by the regex.
+#
+# For -cmd mode, we now use a remote execution program called
+# mhc_connect.pl that supports Modular Host Connection (HostConnect.pm).
+# MHC can try different commands: remsh, ssh, kerberized remsh, etc. until
+# one succeeds.  In order to control MHC's behavior, the user can specify
+# -transport options containing multiple comma separated transport names.
+# The usage message lists the valid transports.  The -ssh option is
+# now treated the same as -transport=ssh.  mhc_connect.pl supports two
+# different types of kerberos authentication: kremsh and kssh.  If the
+# remote account is different than the user running this script, the
+# user's kerberos principal must be in the remote account's .k5login
+# for the kerberos transports to work.
+#
+############################################################################
+$| = 1;    # Turn buffering off on STDOUT
+select( ( select(STDERR), $| = 1 )[0] );    # turn buffering off on STDERR
+
+#--------
+# setup includes
+#--------
+use strict;
+use FindBin qw($Bin);
+
+use lib "$Bin/../lib";
+#use lib qw( /opt/neto/lib/modules /opt/neto/lib/classes);
+
+# Add any additional lib paths specified in the environment
+# (The `|| ""' keeps perl -w from producing "use of undefined
+# value" warnings when PERLLIBPATH is not set.)
+#
+# WARNING: this does not really work for using an alternate
+# copy of something in /opt/neto/lib. "use lib" statements
+# in the required modules end up re-adding the /opt/neto/lib/
+# directories back to the include path in front of the
+# PERLLIBPATH directories.
+
+### Removed to see if we really need this.
+#use lib split( /:/, $ENV{PERLLIBPATH} || "" );
+
+# /opt/neto/lib/modules/Generic.pm
+require NETOGeneric;
+
+# /opt/neto/lib/modules/NETOIssue.pm
+require NETOIssue;
+
+# /opt/neto/lib/modules/Mrun.pm
+require Mrun;
+
+# /opt/neto/lib/classes/EpochTimeClass.pm
+require EpochTimeClass;
+
+# Require in the following modules in the perl distribution
+require Getopt::Long;
+require Sys::Hostname;
+
+use HostConnect;
+
+{    # Main routine surrounding braces.
+
+    #--------
+    # declare variables
+    #--------
+    my ( $batch, $timeout, $domain, $auth_user, $error_list_file,
+        $prog_name );
+    my ( %default_port, %scriptlette, %end_script, %head_script,  
+        %default_user );
+    my ( $time_stamp, $usage, %optctl, @list_files, @list_entries, @ports );
+    my ( $cmd_list, $no_log, $no_force, $override, $yes, $use_alllist,
+        @patterns );
+    my ( @host_patterns, $force_port, $force_cmd, $default_timeout );
+    my ( $log_file,      $mrun,       @list_dirs, $head_script );
+    my ( $cp_user, $cp_pass, $cp_priv, $pattern, @commands, $auth_command );
+    my ( $neg_txt, $force, $run_type, $scriptlette, $end_script, $ports,
+        $greps_txt );
+    my ( @full_list, $lists_txt, $deadman_timeout, $usr_txt, $list_type );
+    my ( $match_field_txt, $commands, $user_txt, @item_list, @all_commands );
+    my ( $class_file, $class, $error, $list_path, $cmd_delim, %cmd_char_map );
+    my ( $cmd_char_match, $cmd, $command, $output_end_delim );
+    my ( $screen_height, $screen_width, $ssh_mode, $ssh_cmd, $ssh_user_txt );
+    my ( $prog_path, $config_file, %configurable_vars, $cmd_process_list );
+    my ( $connect_end_delim, $dev_log_file, $dev_host_regex, $dev_host );
+    my ( $debug, $mhc, $need_sudo, $sudo_cmd, $supported_transports_ref );
+    my ( @transports, %supported_transports, %seen_transports, 
+        $mhc_transport );
+
+    #--------
+    # Get the program name
+    #--------
+    ($prog_name) = $0 =~ /([^\/]+)$/;
+    ($prog_path) = $0 =~ /(.*)\/[^\/]+$/;
+
+    #--------
+    # Get the current time stamp
+    #--------
+    $time_stamp = LocalSub::get_time_stamp();
+
+    #--------
+    # Set defaults
+    #--------
+    $batch             = 10;
+    $default_timeout   = 60;
+    $debug             = 0;
+    $domain            = 'voicemail';
+    $ssh_mode          = 0;
+    $ssh_cmd           = '/usr/bin/ssh';
+    $auth_user         = 'netoadm';
+    $cmd_delim         = '%%';
+    $cmd_char_map{';'} = '<sc>';
+    $class_file        = '/opt/neto/config/domain_class_config';
+    $mrun              = '/opt/neto/bin/mrun5.3.3';
+    $list_path         = '/opt/neto/config';    
+    $mhc_transport     = "/opt/neto/bin/mhc_transport.pl";
+    $sudo_cmd          = "/usr/local/bin/sudo";
+
+    #-----
+    # Set defaults for different run types
+    #-----
+    $default_port{port} = 5601;
+    $scriptlette{port}  = "issue_port.scr";
+    $end_script{port}   = "issue_port.end";
+    $default_user{port} = '';
+
+    $default_port{cmd} = '';
+    $scriptlette{cmd}  = '';
+    $end_script{cmd}   = '';
+    $default_user{cmd} = 'root';
+
+    $dev_log_file   = "/opt/neto/devlog/$prog_name.log";
+    $dev_host_regex = '^dev-';
+    $dev_host       = 0;
+
+    #------
+    # Set up variables able to be set in the config file
+    #------
+    %configurable_vars = (
+        'default_domain'    => \$domain,
+        'default_batch'     => \$batch,
+        'default_timeout'   => \$default_timeout,
+        'ssh_mode'          => \$ssh_mode,
+        'ssh_cmd'           => \$ssh_cmd,
+        'auth_user'         => \$auth_user,
+        'cmd_delim'         => \$cmd_delim,
+        'class_file'        => \$class_file,
+        'mrun'              => \$mrun,
+        'list_path'         => \$list_path,
+        'port_default_port' => \$default_port{port},
+        'port_head_script'  => \$head_script{port},
+        'port_scriptlette'  => \$scriptlette{port},
+        'port_end_script'   => \$end_script{port},
+        'cmd_scriptlette'   => \$scriptlette{cmd},
+        'cmd_end_script'    => \$end_script{cmd},
+        'cmd_head_script'   => \$head_script{cmd},
+        'cmd_default_user'  => \$default_user{cmd},
+        'dev_log_file'      => \$dev_log_file,
+        'dev_host_regex'    => \$dev_host_regex,
+        'mhc_transport'     => \$mhc_transport,
+        'sudo_cmd'          => \$sudo_cmd,
+    );
+
+    #------
+    # If there is a config file defined, read it
+    #------
+    $config_file = NETOIssue::get_config_file( $prog_name, $prog_path );
+    if ($config_file) {
+        NETOGeneric::load_config_file( $config_file, \%configurable_vars );
+    }
+
+    #-----
+    # Misc setup
+    #-----
+    $error_list_file
+        = "/opt/neto/log/issue_errors/$prog_name.$time_stamp.err";
+    $log_file = '';
+    @list_dirs = split( /:/, $list_path );
+    # make sure mrun uses the same list dir
+    $ENV{"MRUN_LIST_PATH"}  = $list_path;   
+
+    # Get supported transport methods so we can check any -trans=s
+    # arguments and so we can include them in our usage message.
+    $mhc = HostConnect->new()
+        or die "$0: internal error: cannot instantiate HostConnect object\n";
+    $supported_transports_ref = $mhc->getAvailableTransports();
+    %supported_transports = map { ( $_, 1 ) } @$supported_transports_ref;
+
+    #--------
+    # Read environment variables
+    #--------
+    # If the QUEUE_DOMAIN environment variable is set, set it to the domain
+    # variable in this script.
+    $domain = $ENV{"QUEUE_DOMAIN"} if ( $ENV{"QUEUE_DOMAIN"} );
+
+    #------
+    # Read in options
+    #------
+    $usage = <<EOF;
+Usage:
+
+$prog_name [!]<regex> <command>... [-l [!]<list>]... [-h [!]<host>]... \\
+              [-class <class>] [-p <port>]... [-c <cmd list>] [-t <timeout>] \\
+              [-b <batch_size>] [-d <domain>] [-g [!]<regex>]... \\
+              [-oe <output_end_delimiter>] [-ce <connect_end_delimiter>] \\
+              [-ssh|-nossh] [-transport transport1[,transport2]...] \\
+              [-cp <cmd process list>] [-hg [!]<host_regex>] [-nf] [-y] [-a] \\
+              [-log <log_file>] [-port | -cmd ] \\
+              [-e <error_list_file>] [-user [<userid>]] [-pass [<passwd>]] \\
+              [-priv [<privilege>]] [-dt <deadman-timeout>]
+
+  Flags: -nf    : do not run in force mode
+         -y     : do not prompt for confirmation
+         -port  : force script to act like issue_port
+         -cmd   : force script to act like issue_cmd
+         -ssh   : Use ssh to connect to remote host if possible in cmd mode.
+         -nossh : Do not try to use ssh to connect to remote host in cmd mode.
+         -transport : try transport method (multiple -transport's allowed)
+
+  Notes: - Using the _neg command ONLY applies to the unflagged regex NOT
+           to the ones specified with -g.  For those specified with -g
+           start the regex with a !.
+         - host_regex's should only be used with alllist type files.
+         - -pass, -priv, -p are not supported for issue_cmd
+         - The output_end_delimiter (-oe) should only be used when issueing
+           commands who's output shows up after the normal command prompt.
+           The command will hang if the regex in the output_end_delimiter
+           never matches a string in the output of the command.
+         - Supported transport methods are:
+               @{[sort @$supported_transports_ref]}
+         - For -cmd mode (aka issue_cmd), you can specify mrun's deadman
+           timeout using the -dt flag and modular host connects connect
+           timeout using the -t flag.  If you specify the -t but not the
+           -dt flag, the -t is treated as though it were -dt: it sets mrun's
+           deadman timeout.  For other modes, there is no separate connect
+           timeout so -dt and -t both set mrun's deadman timeout.  If you
+           specify both, -dt is used and -t is ignored.
+
+EOF
+
+    %optctl = (
+        "l=s"                           => \@list_files,
+        "h=s"                           => \@list_entries,
+        "p=i"                           => \@ports,
+        "c=s"                           => \$cmd_list,
+        "t=i"                           => \$timeout,
+        "b=i"                           => \$batch,
+        "d=s"                           => \$domain,
+        "n"                             => \$no_log,
+        "nf"                            => \$no_force,
+        "o"                             => \$override,
+        "y"                             => \$yes,
+        "g=s"                           => \@patterns,
+        "e=s"                           => \$error_list_file,
+        "hg=s"                          => \@host_patterns,
+        "port"                          => \$force_port,
+        "cmd"                           => \$force_cmd,
+        "user:s"                        => \$cp_user,
+        "pass:s"                        => \$cp_pass,
+        "priv:s"                        => \$cp_priv,
+        "log=s"                         => \$log_file,
+        "class=s"                       => \$class,
+        "oe=s"                          => \$output_end_delim,
+        "ce=s"                          => \$connect_end_delim,
+        "ssh!"                          => \$ssh_mode,
+        "cp=s"                          => \$cmd_process_list,
+        "debug+"                        => \$debug,
+        "deadman-timeout|dt=i"          => \$deadman_timeout,
+        "transports|transport|trans=s@" => sub {
+            my $opt_name = shift;
+            my $opt_val  = shift;
+
+            for my $t ( split( /[,\s]+/, $opt_val ) ) {
+                die "$0: unsupported transport '$t'\n"
+                    unless ( defined $supported_transports{$t} );
+                push( @transports, $t ) unless ( $seen_transports{$t}++ );
+            }
+        },
+    );
+    if ( !Getopt::Long::GetOptions(%optctl) ) {
+        print STDERR "Error parsing arguments. Usage:\n";
+        print STDERR $usage;
+        exit 1;
+    }
+
+    if ( @list_entries && !@list_files && $ARGV[0] !~ /^\.$/ ) {
+        $pattern = '.';
+    }
+    else {
+        $pattern = shift;    # first unflagged arg is the pattern
+    }
+
+    @commands = @ARGV;    # rest of unflagged args are the commands
+
+    #-----
+    # check to see if this is a dev host (ie one that dev uses to access prod)
+    #-----
+    if ( Sys::Hostname::hostname() =~ /$dev_host_regex/ ) {
+        $dev_host = 1;
+    }
+
+    #-----
+    # If dev host, remove auth user
+    #-----
+    if ($dev_host) {
+        $auth_user = '';
+    }
+
+    #------
+    # Check input
+    #------
+    if ( LocalSub::check_input( $usage, \@commands, $cmd_list,   
+        $cmd_process_list, $auth_user, $override,  $force_port, 
+        $force_cmd ) )
+    {
+        exit 1;
+    }
+
+    #-----
+    # Determine screen size
+    #-----
+    NETOGeneric::get_term_size( \$screen_height, \$screen_width );
+    $screen_width = 80 if ( !$screen_width );
+
+    #------
+    # Prompt for any additional info if not redirected
+    #------
+    if ( !NETOIssue::is_redirected() ) {
+        LocalSub::prompt_for_input( \$cp_user, \$cp_pass, \$cp_priv );
+    }
+    if ( $cp_user && $cp_pass ) {
+        $auth_command = "user $cp_user $cp_pass $cp_priv$cmd_delim";
+    }
+    else {
+        $auth_command = '';
+    }
+
+    #------
+    # Set up variables based upon input
+    #------
+    # neg
+    $neg_txt = '';
+    $neg_txt = '!' if ( $prog_name =~ /neg/ );
+
+    # force
+    $force = '-f';
+    $force = '' if ($no_force);
+
+    # Get the script type
+    $run_type
+        = LocalSub::get_script_type( $prog_name, $force_port, $force_cmd );
+
+    # Set scriptlette, end_script and port variables based on run type
+    $scriptlette = $scriptlette{$run_type};
+    $end_script  = $end_script{$run_type};
+    $head_script = $head_script{$run_type}
+        if ( exists $head_script{$run_type} );
+    @ports   = ( $default_port{$run_type} ) unless @ports;
+    $cp_user = $default_user{$run_type}     unless $cp_user;
+
+    # Get the list file based up on inputs
+    $list_type = NETOIssue::get_list_files(
+        $run_type,    $domain,        $use_alllist,
+        \@list_files, \@list_entries, \@list_dirs
+    );
+
+ # If class is specified, read the class file and build greps based upon input
+    if ($class) {
+        $error = 0;
+        $error = NETOIssue::generate_class_patterns( $class, $class_file,
+            $list_type, $domain, \@patterns, \@host_patterns );
+        # error indicates that class file couldn't be opened or class  could not be found.
+        if ($error)    
+        {
+            warn "Error processing class.  Exiting.\n";
+            exit(1);
+        }
+    }
+
+    # In run type cmd read the cmd list here and add the entries into the
+    # @all_commands list that contains all the commands specified on the command
+    # line and those specified in the list.
+    @all_commands = @commands;
+    if ( $run_type eq 'cmd' ) {
+        LocalSub::read_cmd_list( $cmd_list, \@all_commands );
+    }
+
+    # commands
+    if ( $run_type eq 'cmd' ) {
+        $commands = NETOGeneric::list_to_string( \@all_commands, ";" );
+    }
+    else {
+        foreach $command (@commands) {
+            $commands .= $cmd_delim if ($commands);
+            foreach $cmd_char_match ( keys %cmd_char_map ) {
+                $command
+                    =~ s/$cmd_char_match/$cmd_char_map{$cmd_char_match}/g;
+            }
+            $commands .= $command;
+        }
+    }
+
+    # ports
+    $ports = NETOGeneric::list_to_string( \@ports, "," );
+
+    # Greps
+    unshift( @patterns, "$neg_txt$pattern" );
+
+   # if the run type is samon or dmon and the list file is the all list then
+   # pass the run type to the build_mrun_grep_string routine.  This will cause
+   # the routine to only pull entries out for that particular run type.
+    if ( ( $run_type eq 'samon' || $run_type eq 'dmon' ) && $use_alllist ) {
+        $greps_txt
+            = NETOIssue::build_mrun_grep_string( \@patterns, \@host_patterns,
+            $run_type );
+    }
+    else {
+        $greps_txt = NETOIssue::build_mrun_grep_string( \@patterns,
+            \@host_patterns );
+    }
+
+    # Lists
+    @full_list = ( @list_files, @list_entries );
+    $lists_txt = NETOGeneric::list_to_string( \@full_list, " " );
+
+    # Log file
+    # If this is running on a dev host (ie a host that dev uses to access prod)
+    # change the log file.
+    if ($dev_host) {
+        $log_file = $dev_log_file;
+    }
+
+    #-------
+    # For interactive runs, query the user about run specifics unless -y (yes)
+    # was specified
+    #-------
+    if ( !NETOIssue::is_redirected() && !$yes ) {
+        LocalSub::show_user(
+            \@commands,        \@ports,          \@full_list,
+            $greps_txt,        \@list_dirs,      $cmd_list,
+            $cmd_process_list, $error_list_file, $run_type,
+            \$list_type,       $screen_width
+        );
+    }
+
+    #-------
+    # Log info about this run
+    #-------
+    # only log if interactive run or if running on dev access host.  If on a dev
+    # host, the no_log flag is ignored.
+    if ( $dev_host || ( NETOIssue::is_interactive() && !$no_log ) ) {
+        LocalSub::log_this_run(
+            $lists_txt, $greps_txt, $ports,    \@commands,
+            $cmd_list,  $neg_txt,   $log_file, $dev_host
+        );
+    }
+
+    #-------
+    # Run the command
+    #-------
+    if ( $run_type eq 'cmd' ) {
+
+        # $deadman_timeout is for mrun's deadman timer (mrun -t).
+        if ( !defined($deadman_timeout) ) {
+            if ( defined($timeout) ) {
+                $deadman_timeout = $timeout;
+                $timeout         = undef;
+            }
+            else {
+                $deadman_timeout = $default_timeout;
+            }
+        }
+
+        # $timeout is for mhc_transport's $MHC_CONN_TIMEOUT connect timeout.
+        # Set $timeout to max(5, int($deadman_timeout/2.1)).  As long as
+        # $deadman_timeout is not too small, this allows mhc_transport time
+        # to try at least 2 transports before it gets killed by mrun's deadman
+        # timer.
+        if ( !defined($timeout) ) {
+            $timeout = int( $deadman_timeout / 2.1 );
+            $timeout = 5 if ( $timeout < 5 );
+        }
+
+        # build user string if a user is specified
+        $user_txt = '';
+        $user_txt = "-u $cp_user" if ($cp_user);
+
+        $ssh_user_txt = '';
+        $ssh_user_txt = "-l $cp_user" if ($cp_user);
+
+        # If the list type is delim then we want to pull the host name out of
+        # field 3.
+        if ( $list_type eq 'delim' ) {
+            $match_field_txt = "-m 3";
+        }
+        else    # list is not colon separated
+        {
+            $match_field_txt = "";
+        }
+
+        warn "WARNING: -transport option takes precedence over -ssh flag\n"
+            if ( @transports and $ssh_mode );
+
+        # Convert old-style -ssh option to -trans=ssh.
+        @transports = qw(ssh) if ( @transports == 0 and $ssh_mode );
+
+        if (@transports) {
+            # Transports specified, see if any may need sudo.
+            $need_sudo = 0;
+            for my $trans (@transports) {
+                (
+                    # dispatch table sets $need_sudo based on the values
+                    # in @transport.
+                    {   kremsh => sub { },    # Doesn't need sudo.
+                        krsh   => sub { },    # Doesn't need sudo.
+                        kssh   => sub { },    # Doesn't need sudo.
+                    }->{$trans}
+                        || sub { $need_sudo = 1 } # Assume anything else needs sudo.
+                )->();
+            }
+        }
+        else {
+
+            # No transports specified, MHC will use defaults.
+            # Assume default transports may need sudo.
+            $need_sudo = 1;
+        }
+
+        if (   $need_sudo
+            && getpwuid($<) ne $auth_user
+            && -x $sudo_cmd
+            && -f "/etc/sudoers" )
+        {
+
+            # Redirect sudo's stdin and stdout to avoid problems with
+            # newer sudo's per-tty sudo timestamps.  This was a problem
+            # when we first ran push_sapi on a linux adm host.  Without the
+            # redirects, sudo will update the current tty's timestamp but
+            # the commands spawned by mhc_transport.pl with their input
+            # and output connected to pipes will use the "unknown" (no
+            # tty) timestamp.  This redirect trick works with sudo version
+            # 1.6.7p5; it may break with future releases.
+            my $rc = system("$sudo_cmd -v </dev/null >/dev/null");
+            exit( ( $rc >> 8 ) || ( $rc & 255 ) ) if ($rc);
+        }
+
+        # mhc_transport will use certain environment variables if
+        # they exist.  We want to make sure that we don't propagate
+        # any we may have inherited, so we delete them all.
+        delete @ENV{
+            qw(MHC_CMD_TIMEOUT MHC_CONN_TIMEOUT MHC_DEBUG
+                MHC_DEBUG_FILE_BASENAME MHC_OVERRIDE_TRANSPORTS MHC_SUDO_USER
+                MHC_SUGGEST_TRANSPORTS MHC_USE_EXECUTE MHC_VERBOSITY_LEVEL)
+            };
+
+        # Now set just those variables we want mhc_transport to use.
+        # MHC_CMD_TIMEOUT=-1 means don't timeout once mhc_transport
+        # connects: mrun will still kill us.
+        $ENV{'MHC_CONN_TIMEOUT'}        = $timeout if ($timeout);
+        $ENV{'MHC_CMD_TIMEOUT'}         = -1;
+        $ENV{'MHC_DEBUG'}               = $debug if ($debug);
+        $ENV{'MHC_OVERRIDE_TRANSPORTS'} = join( ",", @transports )
+            if (@transports);
+        $ENV{'MHC_VERBOSITY_LEVEL'} = $debug + 1 if ($debug);
+
+        # run the command
+        # Calling exec with a list instead of a single string cuts
+        # down on quoting issues.
+        my @cmd = (
+            $mrun,
+            "-ix",
+            "$mhc_transport %% $ssh_user_txt '$commands'",
+            @full_list,
+
+            # These -gN arguments replace NETOIssue::build_mrun_grep_string().
+            @{ [ map { ( q(-g1), $_ ) } @patterns ] },
+            @{ [ map { ( q(-g3), $_ ) } @host_patterns ] },
+
+            # ( "-g6", $run_type ) x ( $run_type ne "" ),
+            ( "-m", 3 ) x ( $list_type eq 'delim' ),
+            "-B", $batch,
+            "-t", $deadman_timeout,
+            $force,
+        );
+        warn "[DEBUG: cmd=@cmd]\n" if ($debug);
+        exec(@cmd);
+        die "$0: exec: @cmd: $!\n";
+    }
+
+    else    # not running a remsh command
+    {
+        $timeout = $default_timeout if ( !defined($timeout) );
+
+     # Deadman timeout
+     # deadman timeout is feature of mrun but the issue_dmon.scr and
+     # issue_sapi.scr files already handle timeout from a time before mrun had
+     # this feature.  The deadman timeout does have some nice features (like
+     # explicitly killing children or resetting the timeout with each new
+     # output).  So will invoke it beyond the timeout set but will use it.  In
+     # future may be nice to acutally use this instead of the scriptlettes
+     # having a timeout feature.
+        $deadman_timeout = $timeout + 5;
+
+        $cmd
+            = "$mrun $scriptlette $lists_txt -r $greps_txt -B $batch "
+            . "-t $deadman_timeout -x \"ports=$ports\" -x \"cmd_list=$cmd_list\" "
+            . "-x \"commands=$auth_command$commands\" "
+            . "-x \"error_list_file=$error_list_file\" -x \"cmd_delim=$cmd_delim\" "
+            . "-x \"cmd_process_list=$cmd_process_list\" "
+            . "$force -E $end_script";
+        $cmd .= " -h $head_script"         if ($head_script);
+        $cmd .= " -x \"timeout=$timeout\"" if ($timeout);
+        $cmd .= " -x \"output_end_delim=$output_end_delim\""
+            if ($output_end_delim);
+        $cmd .= " -x \"connect_end_delim=$connect_end_delim\""
+            if ($connect_end_delim);
+        $cmd .= " -x \"screen_width=$screen_width\"" if ($screen_width);
+
+        warn "[DEBUG: cmd=$cmd]\n" if ($debug);
+        exec($cmd);
+    }
+
+}    # Main routine surrounding braces
+
+############################################################################
+############################    Local Subroutines  #########################
+############################################################################
+package LocalSub;
+
+############################################################################
+# Subroutine: get_time_stamp
+# Description:
+# Get the current time and returns it in format YYYY.MM.DD.HH.MM.SS
+# Arguments: none
+# Return value: time in above format
+############################################################################
+sub get_time_stamp {
+    my ( $time_ptr, $time_txt );
+
+    $time_ptr = new EpochTimeClass(time);
+    $time_txt = $time_ptr->GetDateTime(9);   # format 9 -> YYYY.MM.DD.HH.MM.SS
+
+    return ($time_txt);
+}
+
+############################################################################
+# Subroutine: check_input
+# Description: Checks validity of inputted values
+# Arguments: $usage
+#            $commands_ref (ref to @commands list, no mod)
+#            $cmd_list
+#            $auth_user
+#            $override
+#            $force_port
+#            $force_cmd
+# Return value: 0 - all ok; 1 - problems
+############################################################################
+sub check_input {
+    my ($usage)            = shift;
+    my ($commands_ref)     = shift;
+    my ($cmd_list)         = shift;
+    my ($cmd_process_list) = shift;
+    my ($auth_user)        = shift;
+    my ($override)         = shift;
+    my ($force_port)       = shift;
+    my ($force_cmd)        = shift;
+
+    # must have at least one command or a command list specified
+    if ( ( !$cmd_list && !$cmd_process_list ) && @$commands_ref < 1 ) {
+        print STDERR "Error: no commands specified.\n";
+        print STDERR $usage;
+        return 1;
+    }
+
+    # Command list must be readable
+    if ( $cmd_list && !-r "$cmd_list" ) {
+        print STDERR "Error: Cannot read $cmd_list.\n";
+        return 1;
+    }
+
+    # Command process list must be readable
+    if ( $cmd_process_list && !-r "$cmd_process_list" ) {
+        print STDERR "Error: Cannot read $cmd_process_list.\n";
+        return 1;
+    }
+
+    # Can only specify one of force_port or force_cmd
+    # They are either 1 or 0 so add them up and if the total is > 1 error.
+    elsif ( $force_port + $force_cmd > 1 ) {
+        print STDERR "Error: Can only specify one of -port or -cmd.\n";
+        print STDERR $usage;
+        return 1;
+    }
+
+    return 0;
+}
+
+############################################################################
+# Subroutine: prompt_for_input
+# Description: Prompt for values of optional paramaters if flag was supplied
+#              with no value supplied
+# Arguments: $cp_user_ref (ref to $cp_user, used and possibly mod)
+#            $cp_pass_ref (ref to $cp_pass, used and possibly mod)
+#            $cp_priv_ref  (ref to $cp_priv, used and possibly mod)
+# Return value: nothing
+############################################################################
+sub prompt_for_input {
+    my ($cp_user_ref) = shift;
+    my ($cp_pass_ref) = shift;
+    my ($cp_priv_ref) = shift;
+
+    my ($user_response);
+
+    if ( defined $$cp_user_ref && !$$cp_user_ref )   # defined but no contents
+    {
+        print STDERR "Enter Userid: ";
+        $user_response = <STDIN>;
+        chomp($user_response);
+        $$cp_user_ref = $user_response;
+    }
+
+    # defined pass but no contents and have defined user
+    if ( defined $$cp_pass_ref && !$$cp_pass_ref && $$cp_user_ref ) {
+        $$cp_pass_ref
+            = NETOGeneric::getpass( "Enter Password for $$cp_user_ref:",
+            \*STDERR );
+    }
+
+    # defined priv's but no contents and have user and passwd
+    if (   defined $$cp_priv_ref
+        && !$$cp_priv_ref
+        && $$cp_user_ref
+        && $$cp_pass_ref )
+    {
+        print STDERR "Enter Privilege: ";
+        $user_response = <STDIN>;
+        chomp($user_response);
+        $$cp_priv_ref = $user_response;
+    }
+}
+
+############################################################################
+# Subroutine: log_this_run
+# Author: Mike Cope
+# Date: 07/31/2008
+# Version: 1.0
+# Description: Constructs log text based on various variables then calls
+#              routine to write the log entry.
+# Arguments: $list_file
+#            $greps_txt
+#            $ports
+#            $commands_ref; ref to @commands, used not mod
+#            $cmd_list
+#            $neg_txt
+#            $log_file (optional, if not specified default will be used)
+#            $dev_host; flag
+# Return value: 0 - all ok; 1 - Couldn't open log file
+############################################################################
+sub log_this_run {
+    my ($list_file)    = shift;
+    my ($greps_txt)    = shift;
+    my ($ports)        = shift;
+    my ($commands_ref) = shift;
+    my ($cmd_list)     = shift;
+    my ($neg_txt)      = shift;
+    my ($log_file)     = shift;
+    my ($dev_host)     = shift;
+
+    my ( $log_txt, $command, $commands, @cmd_parts, $dest_mod, $mod );
+
+   # go through the command list and build a comma separated list of commands.
+   # if the command is a 'user' command, block out the password.
+    foreach $command (@$commands_ref) {
+        $commands .= ',' if ($commands);
+        if ( $command =~ /^\s*user\s+\S+/ ) {
+            @cmd_parts = split( " ", $command );
+            $cmd_parts[2] = 'XXXXX';
+            $commands .= join( ' ', @cmd_parts );
+        }
+        else {
+            $commands .= $command;
+        }
+    }
+
+    $log_txt = "list=$list_file";
+    $log_txt .= "; grep=$greps_txt";
+    $log_txt .= "; ports=$ports" if ($ports);
+    $log_txt .= "; cmds=$commands" if ($commands);
+    $log_txt .= "; cmd_list=$cmd_list" if ($cmd_list);
+
+    if ( NETOIssue::log_script_run( $log_txt, '', $log_file ) ) {
+        print STDERR "Warning: Could not open log file.  The run will not be "
+            . "logged.\n";
+    }
+
+    # Assure the permissions on the log file are correct
+    $dest_mod = 0664;
+    $dest_mod = 0666 if ($dev_host);
+    $mod      = ( stat($log_file) )[2]
+        & 0777;    # just return the perm bits of the mode
+    chmod( $dest_mod, $log_file ) if ( $mod ne $dest_mod );
+}
+
+############################################################################
+# Subroutine: get_script_type
+#
+# Description:
+# Determines the type of script that is running (issue_sapi or issue_cmd) \
+# and return this.
+#
+# Arguments: $prog_name
+#            $force_port
+#            $force_cmd
+#
+# Return value: type of run
+############################################################################
+sub get_script_type {
+    my ($prog_name)  = shift;
+    my ($force_port) = shift;
+    my ($force_cmd)  = shift;
+
+    return ('port')
+        if ( $force_port || ( $prog_name =~ /^issue_port/ && !$force_cmd ) );
+    return ('cmd')
+        if ( $force_cmd || ( $prog_name =~ /^issue_cmd/ && !$force_port ) );
+}
+
+############################################################################
+# Subroutine: read_cmd_list
+# Description: reads the command list and appends the commands to commands
+#              array
+# Arguments: $cmd_list
+#            $commands_ref (ref to @commands, will possibly be added to)
+# Return value: nothing
+############################################################################
+sub read_cmd_list {
+    my ($cmd_list)     = shift;
+    my ($commands_ref) = shift;
+    my ($line);
+
+    open( CMD, "<$cmd_list" );
+    foreach $line (<CMD>) {
+        $line =~ s/^\s*(.*)\s*$/$1/;
+        next unless ($line);
+        next if ( $line =~ /^#/ );
+        push( @$commands_ref, "$line" );
+    }
+    close(CMD);
+}
+
+############################################################################
+# Subroutine: show_user
+# Author: Ryan Richins
+# Date: 07/31/2008
+# Version: 1.0
+# Description: Shows the user what is going to be run and asks if they want
+#              to continue.
+# Arguments: $commands_ref (ref to @commands, will be used not modified)
+#            $ports_ref (ref to @ports, will be used not modified)
+#            $raw_list_ref (ref to @raw_list, used not mod)
+#            $greps_txt
+#            $list_dirs_ref (ref to @list_dirs, will be used not mod)
+#            $cmd_list
+#            $error_list_file
+#            $run_type
+#            $list_type_ref (ref to $list_type, used may be mod)
+#            $screen_width
+# Return value: nothing
+############################################################################
+sub show_user {
+    my ($commands_ref)     = shift;
+    my ($ports_ref)        = shift;
+    my ($raw_list_ref)     = shift;
+    my ($greps_txt)        = shift;
+    my ($list_dirs_ref)    = shift;
+    my ($cmd_list)         = shift;
+    my ($cmd_process_list) = shift;
+    my ($error_list_file)  = shift;
+    my ($run_type)         = shift;
+    my ($list_type_ref)    = shift;
+    my ($screen_width)     = shift;
+
+    my ( @item_list, $pattern, %patterns, @match_list, @cmd_parts );
+    my ( $command, $port, $run_type_txt, $user_response, @cmd_list_commands );
+    my ( $field, @pieces, $item, @cmd_process_list_commands );
+
+    # Determine what will be run against
+    #  Construct list
+    Mrun::gen_item_list( $raw_list_ref, $list_dirs_ref, \@item_list );
+
+    #  Construct patterns hash based upon the grep_txt string that will
+    #  be put into the mrun command line.
+    @pieces = split( / -g/, $greps_txt );
+
+    shift(@pieces);    # first element should be blank
+    foreach $item (@pieces) {
+        ( $field, $pattern ) = $item =~ /^(\d+)\s+(.*)/;
+        $pattern =~ s/^\s*"//;
+        $pattern =~ s/"\s*$//;
+        $patterns{$pattern} = $field;
+    }
+
+    #  Filter the list file
+    if ( $run_type eq 'cmd' && $$list_type_ref eq 'delim' ) # host name in 3rd
+                                                            # column
+    {
+        Mrun::filter_list( \@item_list, \%patterns, ':', 3, \@match_list );
+    }
+    else {
+        Mrun::filter_list( \@item_list, \%patterns, ':', 1, \@match_list );
+    }
+
+    # Show the list of items that the script will hit
+    print STDERR "\nThe script will run against the following:\n";
+    NETOGeneric::display_list( \@match_list, \*STDERR, '', '',
+        $screen_width );
+
+    # Show the commands the script will run
+    if ( $run_type eq 'cmd' ) {
+        $run_type_txt = '';
+    }
+    else {
+        $run_type_txt = $run_type;
+    }
+    print STDERR
+        "\nThe script will run the following $run_type_txt command(s):\n";
+    foreach $command (@$commands_ref) {
+        if ( $command =~ /^\s*user\s+/ ) {
+            @cmd_parts = split( " ", $command );
+            $cmd_parts[2] = 'XXXXX';
+            print STDERR "@cmd_parts\n";
+        }
+        else {
+            print STDERR "$command\n";
+        }
+    }
+
+    # Show the commands file and it's contents if one was specified
+    if ($cmd_list) {
+        print STDERR
+            "\nThe script will run the following $run_type commands from the file\n";
+        print STDERR "$cmd_list:\n";
+
+        LocalSub::read_cmd_list( $cmd_list, \@cmd_list_commands );
+        foreach $command (@cmd_list_commands) {
+            print STDERR "  $command\n";
+        }
+    }
+
+    # Show the commands file and it's contents if one was specified
+    if ($cmd_process_list) {
+        print STDERR
+            "\nThe script will run the following $run_type commands on the process that match \'proc:\'\n";
+        print STDERR "$cmd_process_list:\n";
+
+        LocalSub::read_cmd_list( $cmd_process_list,
+            \@cmd_process_list_commands );
+        foreach $command (@cmd_process_list_commands) {
+            print STDERR "  $command\n";
+        }
+    }
+
+    # Show the ports if the list is not colon separated and not running dmon
+    if ( $$list_type_ref eq 'nodelim' && $run_type eq 'sapi' ) {
+        print STDERR "\nThe script will use the following port(s):\n";
+        foreach $port (@$ports_ref) {
+            print STDERR "  $port\n";
+        }
+    }
+
+    # Show the file that the script will log errors to
+    if ( $error_list_file && $run_type ne 'cmd' ) {
+        print STDERR "\nThe script will log any errors found to the file:\n";
+        print STDERR "  $error_list_file\n";
+    }
+
+    print STDERR "\nDo you wish to continue? (y/n) ";
+    $user_response = <STDIN>;
+    exit unless ( $user_response =~ /y/i );
+}
